@@ -5,17 +5,39 @@
     <title>AJuDE</title>
 </head>
 <body>
-    <h1>Cadastro</h1>
-    <p id="mensagem"></p>
-    
-    <p><input id="nome" type="text" placeholder="Nome"></p>
-    <p><input id="sobrenome" type="text" placeholder="Sobrenome"></p>
-    <p><input id="email" type="email" placeholder="Email"></p>
-    <p><input id="cartao" type="text" placeholder="Cartão de crédito"></p>
-    <p><input id="senha" type="password" value="senha"></p>
-    <p><button id="cadastro">Cadastrar!</button></p>
+    <hr>
+    <header>
+        <h1>AJuDE: AquiJUntosDoandoEsperança</h1>
+        <button id="singUp" type="button">Cadastre-se!</button>
+        <button id="singIn">Login</button>
+    </header>
+    <hr> 
 
     
+    <div id="cadastrar">
+    
+        <h1>Cadastro</h1>
+        <p id="mensagemCadastro"></p>
+    
+        <p><input id="nome" type="text" placeholder="Nome"></p>
+        <p><input id="sobrenome" type="text" placeholder="Sobrenome"></p>
+        <p><input id="email" type="email" placeholder="E-mail"></p>
+        <p><input id="cartao" type="text" placeholder="Cartão de crédito"></p>
+        <p><input id="senha" type="password" value="senha"></p>
+        <p><button id="cadastro">Cadastrar!</button></p>
 
+    </div>
+
+    <div id="entrar">
+
+        <h1>Login</h1>
+        <p id="mensagemLogin"></p>
+
+        <p><input id="emailLogin" type="email" placeholder="E-mail"></p>
+        <p><input id="senhaLogin" type="password" value="senha"></p>
+        <p><button id="login">Login!</button></p>
+    </div>
+    
+    <script type="module" src="app.js"></script>
 </body>
 </html>
