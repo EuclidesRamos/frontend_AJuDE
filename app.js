@@ -23,15 +23,16 @@ function login() {
     let email = document.querySelector('#emailLogin').value;
     let senha = document.querySelector('#senhaLogin').value;
 
-    fetch(URL + "/usuarios", 
+    fetch(URL + "/login/usuarios", 
     {
-        'method':'',
-        'body':``
+        'method':'POST',
+        'body':`{"email":"${email}", "senha":"${senha}"}`,
+        'headers':{'Content-Type':'application/json'}
     })
 }
 
-function mudarEstado(el) {
-    var display = document.getElementById(el).style.display;
+function mudarEstado(divExibir, divOcultar) {
+    var display = document.getElementById(divExibir).style.display;
     if(display == "none")
         document.getElementById(el).style.display = 'block';
     else
@@ -44,8 +45,8 @@ function mudarEstado(el) {
     let $buttonSingIn = document.querySelector("#singIn");
     let $buttonLogin = document.querySelector("#login");
 
-    $buttonSingUp.addEventListener('click', mudarEstado('cadastrar'));
-    $buttonSingIn.addEventListener('click', mudarEstado('entrar'));
+    $buttonSingUp.addEventListener('click', mudarEstado('cadastrar', 'entrar'));
+    $buttonSingIn.addEventListener('click', mudarEstado('entrar', 'cadastrar'));
     $buttonCadastro.addEventListener('click', cadastro);
     $buttonLogin.addEventListener('click', login);
 }());
