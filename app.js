@@ -1,8 +1,11 @@
-let $mensagem = document.querySelector("#mensagem");
+let $mensagemCadastro = document.querySelector("#mensagemCadastro");
+let $mensagemLogin = document.querySelector("#mensagemLogin");
+let URL = "http://localhost:8080/api/v1";
 
 function cadastro() {
-    let pNome = document.querySelector('#pnome').value;
-    let uNome = document.querySelector('#unome').value;
+    $mensagemCadastro.innerText = "Oi, entrei";
+    let pNome = document.querySelector('#primeiroNome').value;
+    let uNome = document.querySelector('#ultimoNome').value;
     let email = document.querySelector('#email').value;
     let cartao = document.querySelector('#cartao').value;
     let senha = document.querySelector('#senha').value;
@@ -10,12 +13,12 @@ function cadastro() {
     fetch(URL + "/usuarios", 
     {
         'method':'POST',
-        'body':`{"primeiro nome":"${pNome}", "ultimo nome":"${uNome}", "email":"${email}", "cartao":"${cartao}", "senha":"${senha}"}`,
+        'body':`{"primeiroNome":"${primeiroNome}", "ultimoNome":"${ultimoNome}", "email":"${email}", "numCartao":"${cartao}", "senha":"${senha}"}`,
         'headers':{'Content-Type':'application/json'}
     })
     .then(response => response.json())
     .then(dados => {
-        $mensagem.innerText = "Cadastro realizado com sucesso!";
+        $mensagemCadastro.innerText = "Cadastro realizado com sucesso!";
     })
 }
 
@@ -23,30 +26,43 @@ function login() {
     let email = document.querySelector('#emailLogin').value;
     let senha = document.querySelector('#senhaLogin').value;
 
-    fetch(URL + "/login/usuarios", 
+    fetch(URL + "/login", 
     {
         'method':'POST',
-        'body':`{"email":"${email}", "senha":"${senha}"}`,
+        'body':`{"email":"${email}", "senha":"${senha}"}`, // Verificar se essa é a melhor forma de manipular senha
         'headers':{'Content-Type':'application/json'}
+    })
+    .then(response => response.json())
+    .then(dados => {
+        console.log(dados);
+        $mensagemLogin.innerText = "Login realizado com sucesso!";
     })
 }
 
 function mudarEstado(divExibir, divOcultar) {
     var display = document.getElementById(divExibir).style.display;
-    if(display == "none")
-        document.getElementById(el).style.display = 'block';
-    else
-        document.getElementById(el).style.display = 'none';
+    if(display == "none") {
+        document.getElementById(divExibir).style.display = 'block';
+        document.getElementById(divOcultar).style.display = 'none';
+    } else {
+        document.getElementById(divExibir).style.display = 'block';
+        document.getElementById(divOcultar).style.display = 'none';
+    }
 }
 
 (function init() {
     let $buttonCadastro = document.querySelector("#cadastro");
-    let $buttonSingUp = document.querySelector("#singUp");
-    let $buttonSingIn = document.querySelector("#singIn");
     let $buttonLogin = document.querySelector("#login");
 
-    $buttonSingUp.addEventListener('click', mudarEstado('cadastrar', 'entrar'));
-    $buttonSingIn.addEventListener('click', mudarEstado('entrar', 'cadastrar'));
+    let $buttonSingUp = document.querySelector("#singUp");
+    let $buttonSingIn = document.querySelector("#singIn");
+
     $buttonCadastro.addEventListener('click', cadastro);
     $buttonLogin.addEventListener('click', login);
+
+    $buttonSingUp.addEventListener('click', function () {mudarEstado('cadastrar', 'entrar')});
+    $buttonSingIn.addEventListener('click', function () {mudarEstado('entrar', 'cadastrar')});
+
+    $mensagemCadastro.innerText = "Vamos lá!";
+    
 }());
