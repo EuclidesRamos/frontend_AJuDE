@@ -1,11 +1,11 @@
 let $mensagemCadastro = document.querySelector("#mensagemCadastro");
 let $mensagemLogin = document.querySelector("#mensagemLogin");
-let URL = "http://localhost:8080/api/v1";
+let URL = "http://ajudeproject.herokuapp.com/api/v1";
 
 function cadastro() {
-    $mensagemCadastro.innerText = "Oi, entrei";
-    let pNome = document.querySelector('#primeiroNome').value;
-    let uNome = document.querySelector('#ultimoNome').value;
+    $mensagemCadastro.innerText = "Realizando Cadastro.";
+    let primeiroNome = document.querySelector('#primeiroNome').value;
+    let ultimoNome = document.querySelector('#ultimoNome').value;
     let email = document.querySelector('#email').value;
     let cartao = document.querySelector('#cartao').value;
     let senha = document.querySelector('#senha').value;
