@@ -1,6 +1,57 @@
-.singUp, .singIn {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 500;
-    text-decoration: none;
-    color: blueviolet;
+body {
+    background: #c1dee1;
+}
+
+header {
+    background: #6c9599;
+    text-align: center;
+}
+
+#singUp, #singIn {
+    background:white;
+    border-radius: 20px;
+    border: none;
+    color: #6c9599;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+}
+
+h1 {
+    color: #6c9599;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 50px;
+}
+
+#cadastrar, #entrar {
+    text-align: center;
+}
+
+input {
+    color: #305561;
+    background: white;
+    border-radius: 20px;
+    width: 200px;
+    height: 25px;
+    text-align: center;
+    border-width: 2px;
+    border-color: #305561;
+    border-style: solid;
+}
+
+#cadastro, #login {
+    color: white;
+    background: #305561;
+    width: 200px;
+    height: 30px;
+    border-radius: 20px;
+    border-width: 0px;
+    border-color: #305561;
+    border-style: solid;
+}
+
+#imagem {
+    background: transparent;
+    width: 500px;
+    height: 205px;
+    border: none;
 }

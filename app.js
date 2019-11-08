@@ -3,7 +3,6 @@ let $mensagemLogin = document.querySelector("#mensagemLogin");
 let URL = "http://ajudeproject.herokuapp.com/api/v1";
 
 function cadastro() {
-    $mensagemCadastro.innerText = "Realizando Cadastro.";
     let primeiroNome = document.querySelector('#primeiroNome').value;
     let ultimoNome = document.querySelector('#ultimoNome').value;
     let email = document.querySelector('#email').value;
@@ -34,7 +33,6 @@ function login() {
     })
     .then(response => response.json())
     .then(dados => {
-        console.log(dados);
         $mensagemLogin.innerText = "Login realizado com sucesso!";
     })
 }
@@ -50,9 +48,15 @@ function mudarEstado(divExibir, divOcultar) {
     }
 }
 
+function home() {
+    document.getElementById('cadastrar').style.display = 'none';
+    document.getElementById('entrar').style.display = 'none';
+}
+
 (function init() {
     let $buttonCadastro = document.querySelector("#cadastro");
     let $buttonLogin = document.querySelector("#login");
+    let $buttonHome = document.querySelector("#imagem");
 
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
@@ -62,7 +66,6 @@ function mudarEstado(divExibir, divOcultar) {
 
     $buttonSingUp.addEventListener('click', function () {mudarEstado('cadastrar', 'entrar')});
     $buttonSingIn.addEventListener('click', function () {mudarEstado('entrar', 'cadastrar')});
-
-    $mensagemCadastro.innerText = "Vamos lá!";
+    $buttonHome.addEventListener('click', function () {home()});
     
 }());
