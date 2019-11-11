@@ -7,7 +7,7 @@ header {
     text-align: center;
 }
 
-#singUp, #singIn {
+#singUp, #singIn, #desconectar {
     background:white;
     border-radius: 20px;
     border: none;
@@ -38,7 +38,7 @@ input {
     border-style: solid;
 }
 
-#cadastro, #login {
+#cadastro, #login, #cadastraCampanha {
     color: white;
     background: #305561;
     width: 200px;

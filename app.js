@@ -33,8 +33,13 @@ function login() {
     })
     .then(response => response.json())
     .then(dados => {
+        let token = dados.token;
+        sessionStorage.setItem(email, token);
         $mensagemLogin.innerText = "Login realizado com sucesso!";
+        hall();
     })
+
+    return 
 }
 
 function mudarEstado(divExibir, divOcultar) {
@@ -53,6 +58,42 @@ function home() {
     document.getElementById('entrar').style.display = 'none';
 }
 
+function hall() {
+    document.getElementById('cadastrar').style.display = 'none';
+    document.getElementById('entrar').style.display = 'none';
+    document.getElementById('singUp').style.display = 'none';
+    document.getElementById('singIn').style.display = 'none';
+
+    document.getElementById('hall').style.display = 'block';
+    document.getElementById('desconectar').style.display = 'block';
+}
+
+function exibeCadastraCampanha() {
+    document.getElementById('hall').style.display = 'none';
+    document.getElementById('cadastrarCampanha').style.display = 'block';
+    cadastraCampanha();
+}
+
+function cadastraCampanha(email) {
+    let nomeCurto = document.querySelector("#nomeCurto").value;
+    let descricao = document.querySelector("#descricao").value;
+    let deadLine = document.querySelector("#deadLine").value;
+    let meta = document.querySelector("#meta").value;
+
+    fetch(URL + "/campanha",
+    {
+        'method':'POST',
+        'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":"${meta}" }`,
+        'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + token}
+    })
+}
+
+function desconectar() {
+    sessionStorage.getItem();
+}
+
+
+
 (function init() {
     let $buttonCadastro = document.querySelector("#cadastro");
     let $buttonLogin = document.querySelector("#login");
@@ -61,11 +102,19 @@ function home() {
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
 
+    let $buttonCadastrarCampanha = document.querySelector("#cadastraCampanha");
+    let $buttonDesconectar = document.querySelector("#desconectar");
+
     $buttonCadastro.addEventListener('click', cadastro);
     $buttonLogin.addEventListener('click', login);
-
-    $buttonSingUp.addEventListener('click', function () {mudarEstado('cadastrar', 'entrar')});
-    $buttonSingIn.addEventListener('click', function () {mudarEstado('entrar', 'cadastrar')});
     $buttonHome.addEventListener('click', function () {home()});
+
+    $buttonSingUp.addEventListener('click', function () { mudarEstado('cadastrar', 'entrar') });
+    $buttonSingIn.addEventListener('click', function () { mudarEstado('entrar', 'cadastrar') });
+    
+    $buttonCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
+    $buttonDesconectar.addEventListener('click', function () { desconectar() });
+
+
     
 }());
