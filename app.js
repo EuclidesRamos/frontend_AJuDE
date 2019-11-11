@@ -1,6 +1,10 @@
 let $mensagemCadastro = document.querySelector("#mensagemCadastro");
 let $mensagemLogin = document.querySelector("#mensagemLogin");
+let $mensagemCadastroCampanha = document.querySelector('#mensagemCadastroCampanha');
+
 let URL = "http://ajudeproject.herokuapp.com/api/v1";
+
+let idToken;
 
 function cadastro() {
     let primeiroNome = document.querySelector('#primeiroNome').value;
@@ -17,7 +21,8 @@ function cadastro() {
     })
     .then(response => response.json())
     .then(dados => {
-        $mensagemCadastro.innerText = "Cadastro realizado com sucesso!";
+        alert("CADASTRO REALIZADO COM SUCESSO!");
+        home();
     })
 }
 
@@ -35,11 +40,31 @@ function login() {
     .then(dados => {
         let token = dados.token;
         sessionStorage.setItem(email, token);
-        $mensagemLogin.innerText = "Login realizado com sucesso!";
+        idToken = email;
         hall();
-    })
+    }) 
+}
 
-    return 
+function cadastraCampanha() {
+    let nomeCurto = document.querySelector("#nomeCurto").value;
+    let descricao = document.querySelector("#descricao").value;
+    let deadLine = document.querySelector("#deadLine").value;
+    let meta = document.querySelector("#meta").value;
+
+    if (!!sessionStorage.getItem(idToken)) {
+        fetch(URL + "/campanha",
+        {
+            'method':'POST',
+            'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":"${meta}" }`,
+            'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => response.json())
+        .then(dados => {
+            
+        })
+    } else {
+        alert("USUÁRIO NÃO ESTÁ LOGADO!");
+    }
 }
 
 function mudarEstado(divExibir, divOcultar) {
@@ -54,8 +79,17 @@ function mudarEstado(divExibir, divOcultar) {
 }
 
 function home() {
-    document.getElementById('cadastrar').style.display = 'none';
-    document.getElementById('entrar').style.display = 'none';
+    if (document.getElementById('cadastrar').style.display !== 'none') {
+        document.getElementById('cadastrar').style.display = 'none';
+        document.getElementById('entrar').style.display = 'none';
+        
+        document.getElementById('singUp').style.display = 'inline';
+        document.getElementById('singIn').style.display = 'inline';
+    
+        document.getElementById('hall').style.display = 'none';
+        document.getElementById('desconectar').style.display = 'none';
+        document.getElementById('cadastrarCampanha').style.display = 'none';
+    }
 }
 
 function hall() {
@@ -65,31 +99,21 @@ function hall() {
     document.getElementById('singIn').style.display = 'none';
 
     document.getElementById('hall').style.display = 'block';
-    document.getElementById('desconectar').style.display = 'block';
+    document.getElementById('desconectar').style.display = 'inline';
 }
 
 function exibeCadastraCampanha() {
     document.getElementById('hall').style.display = 'none';
     document.getElementById('cadastrarCampanha').style.display = 'block';
-    cadastraCampanha();
 }
 
-function cadastraCampanha(email) {
-    let nomeCurto = document.querySelector("#nomeCurto").value;
-    let descricao = document.querySelector("#descricao").value;
-    let deadLine = document.querySelector("#deadLine").value;
-    let meta = document.querySelector("#meta").value;
 
-    fetch(URL + "/campanha",
-    {
-        'method':'POST',
-        'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":"${meta}" }`,
-        'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + token}
-    })
-}
 
 function desconectar() {
-    sessionStorage.getItem();
+    if (!!sessionStorage.getItem(idToken)) {
+        sessionStorage.removeItem(idToken);
+    }
+    home();
 }
 
 
@@ -102,17 +126,20 @@ function desconectar() {
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
 
-    let $buttonCadastrarCampanha = document.querySelector("#cadastraCampanha");
+    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
     let $buttonDesconectar = document.querySelector("#desconectar");
+    let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
 
     $buttonCadastro.addEventListener('click', cadastro);
     $buttonLogin.addEventListener('click', login);
-    $buttonHome.addEventListener('click', function () {home()});
+    $buttonCampanhaCadastro.addEventListener('click', function () { cadastraCampanha });
 
+
+    $buttonHome.addEventListener('click', function () { home() });
     $buttonSingUp.addEventListener('click', function () { mudarEstado('cadastrar', 'entrar') });
     $buttonSingIn.addEventListener('click', function () { mudarEstado('entrar', 'cadastrar') });
-    
-    $buttonCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
+    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
+
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
 
 

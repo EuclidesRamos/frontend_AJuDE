@@ -7,12 +7,12 @@
     <link rel="shortcut icon" href="icons\icon-page.png"/>
 </head>
 <body>
-    <header>
+    <header style="text-align: center">
         <button id="imagem"> <img src="icons\AJuDE.png" width="500" height="205"> </button>
         <br>
         <button id="singUp" type="button" style="width: 150px; height: 30px">CADASTRE-SE</button>
-        <button id="singIn" style="width: 100px; height: 30px">ENTRAR</button>
-        <button id="desconectar" style="width: 100px; height: 30px; display: none">DESCONECTAR</button>
+        <button id="singIn" type="button "style="width: 100px; height: 30px">ENTRAR</button>
+        <button id="desconectar" type="button" style="width: 150px; height: 30px; display: none">DESCONECTAR</button>
         <br>
         <br>
 
@@ -47,13 +47,14 @@
 
         <h1>Bem Vindo!</h1>
 
-        <button id="cadastraCampanha">CADASTRAR CAMPANHA</button>
+        <button id="exibirCadastraCampanha">CADASTRAR CAMPANHA</button>
 
     </div>
 
-    <div id="cadastrarCampanha">
+    <div id="cadastrarCampanha" style="display: none">
         
         <h1>Cadastro de Campanha</h1>
+        <p id="mensagemCadastroCampanha"></p>
 
         <p><input id="nomeCurto" type="text" placeholder="Nome curto"></p>
         <p><input id="descricao" type="text" placeholder="Descrição"></p>
