@@ -4,7 +4,7 @@ let $mensagemCadastroCampanha = document.querySelector('#mensagemCadastroCampanh
 
 let URL = "http://ajudeproject.herokuapp.com/api/v1";
 
-let idToken;
+let idToken = "idToken";
 
 function cadastro() {
     let primeiroNome = document.querySelector('#primeiroNome').value;
@@ -38,10 +38,14 @@ function login() {
     })
     .then(response => response.json())
     .then(dados => {
-        let token = dados.token;
-        sessionStorage.setItem(email, token);
-        idToken = email;
-        hall();
+        if (!!dados.token) {
+            let token = dados.token;
+            sessionStorage.setItem(idToken, token);
+            hall();
+        } else {
+            alert("USUÁRIO NÃO CADASTRADO");
+            home();
+        }
     });
 }
 
@@ -60,6 +64,7 @@ function cadastraCampanha() {
         })
         .then(response => response.json())
         .then(dados => {
+            let urlCampanha = dados.url;
             alert("CAMPANHA CADASTRADA COM SUCESSO!");
             hall();
         });
@@ -124,16 +129,19 @@ function mudarEstado(divExibir, divOcultar) {
 }
 
 function home() {
-    if (document.getElementById('cadastrar').style.display !== 'none') {
+    if (!!sessionStorage.getItem(idToken)) {
+        hall();
+    } else {
         document.getElementById('cadastrar').style.display = 'none';
         document.getElementById('entrar').style.display = 'none';
-        
+            
         document.getElementById('singUp').style.display = 'inline';
         document.getElementById('singIn').style.display = 'inline';
-    
+        
         document.getElementById('hall').style.display = 'none';
         document.getElementById('desconectar').style.display = 'none';
         document.getElementById('cadastrarCampanha').style.display = 'none';
+        document.getElementById('pesquisarCampanha').style.display = 'none';
     }
 }
 
@@ -145,11 +153,21 @@ function hall() {
 
     document.getElementById('hall').style.display = 'block';
     document.getElementById('desconectar').style.display = 'inline';
+
+    document.getElementById('cadastrarCampanha').style.display = 'none';
+    document.getElementById('pesquisarCampanha').style.display = 'none';
+    document.getElementById('resultadoBusca').style.display = 'none';
+
 }
 
 function exibeCadastraCampanha() {
     document.getElementById('hall').style.display = 'none';
     document.getElementById('cadastrarCampanha').style.display = 'block';
+}
+
+function exibePesquisarCampanha() {
+    document.getElementById('hall').style.display = 'none';
+    document.getElementById('pesquisarCampanha').style.display = 'block';
 }
 
 function desconectar() {
@@ -159,41 +177,40 @@ function desconectar() {
     home();
 }
 
-function exibePesquisarCampanha() {
-    document.getElementById('hall').style.display = 'none';
-    document.getElementById('pesquisarCampanha').style.display = 'block';
-}
-
-
 
 (function init() {
-    let $buttonCadastro = document.querySelector("#cadastro");
-    let $buttonLogin = document.querySelector("#login");
-    let $buttonHome = document.querySelector("#imagem");
 
+    // Botões HOME
+    let $buttonHome = document.querySelector("#imagem");
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
-
-    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
-    let $buttonDesconectar = document.querySelector("#desconectar");
+    
+    // Botões ENVIAR FORMULÁRIO
+    let $buttonCadastro = document.querySelector("#cadastro");
+    let $buttonLogin = document.querySelector("#login");
+    
     let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
-
-    let $buttonExibirPesquisarCampanha = document.querySelector("#exibePesquisarCampanha");
     let $buttonPesquisaCampanha = document.querySelector("#campanhaPesquisa");
 
-    $buttonCadastro.addEventListener('click', cadastro);
-    $buttonLogin.addEventListener('click', login);
-    $buttonCampanhaCadastro.addEventListener('click', function () { cadastraCampanha });
-    $buttonPesquisaCampanha.addEventListener('click', function () { pesquisaCampanha });
+    // Botões HALL (Após Login)
+    let $buttonDesconectar = document.querySelector("#desconectar");
+    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
+    let $buttonExibirPesquisarCampanha = document.querySelector("#exibePesquisarCampanha");
 
-
+    // Eventos Botões HOME
     $buttonHome.addEventListener('click', function () { home() });
     $buttonSingUp.addEventListener('click', function () { mudarEstado('cadastrar', 'entrar') });
     $buttonSingIn.addEventListener('click', function () { mudarEstado('entrar', 'cadastrar') });
+    
+    // Eventos Botões ENVIAR FORMULÁRIO
+    $buttonCadastro.addEventListener('click', cadastro);
+    $buttonLogin.addEventListener('click', login);
 
-    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
+    $buttonCampanhaCadastro.addEventListener('click', cadastraCampanha);
+    $buttonPesquisaCampanha.addEventListener('click', pesquisaCampanha);
+
+    // Eventos Botões HALL (Após Login)
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
+    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
     $buttonExibirPesquisarCampanha.addEventListener('click', function () { exibePesquisarCampanha() });
-    
-    
 }());
