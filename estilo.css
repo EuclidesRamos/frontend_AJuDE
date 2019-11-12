@@ -22,7 +22,7 @@ h1 {
     font-size: 50px;
 }
 
-#cadastrar, #entrar, #hall, #cadastrarCampanha {
+#cadastrar, #entrar, #hall, #cadastrarCampanha, #pesquisarCampanha, #resultadoBusca {
     text-align: center;
 }
 
@@ -38,7 +38,7 @@ input {
     border-style: solid;
 }
 
-#cadastro, #login, #exibirCadastraCampanha, #campanhaCadastro {
+#cadastro, #login, #exibirCadastraCampanha, #campanhaCadastro, #exibePesquisarCampanha, #campanhaPesquisa {
     color: white;
     background: #305561;
     width: 200px;
@@ -54,4 +54,12 @@ input {
     width: 500px;
     height: 205px;
     border: none;
+}
+
+#resultadoBuscaCampanha {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
+    color: #305561;
+    text-align: center;
+
 }

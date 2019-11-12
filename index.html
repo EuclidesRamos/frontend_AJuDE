@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="icons\icon-page.png"/>
 </head>
 <body>
-    <header style="text-align: center">
+    <header> <!-- Remover o style daqui e ver se funciona -->
         <button id="imagem"> <img src="icons\AJuDE.png" width="500" height="205"> </button>
         <br>
         <button id="singUp" type="button" style="width: 150px; height: 30px">CADASTRE-SE</button>
@@ -17,7 +17,6 @@
         <br>
 
     </header>
-
     
     <div id="cadastrar" style="display: none">
     
@@ -48,6 +47,7 @@
         <h1>Bem Vindo!</h1>
 
         <button id="exibirCadastraCampanha">CADASTRAR CAMPANHA</button>
+        <button id="exibePesquisarCampanha">PESQUISAR CAMPANHA</button>
 
     </div>
 
@@ -61,6 +61,18 @@
         <p><input id="deadLine" type="text" placeholder="DeadLine"></p>
         <p><input id="meta" type="text" placeholder="Meta"></p>
         <p><button id="campanhaCadastro">CADASTRAR!</button></p>
+    </div>
+
+    <div id="pesquisarCampanha" style="display: none">
+    
+        <p><input id="buscarCampanha" type="text" placeholder="Campanha"></p>
+        <p><button id="campanhaPesquisa">PESQUISAR!</button></p>
+    
+    </div>
+
+    <div id="resultadoBusca" style ="display: none">
+
+
     </div>
 
     <script type="module" src="app.js"></script>
