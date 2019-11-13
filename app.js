@@ -55,6 +55,8 @@ function cadastraCampanha() {
     let deadLine = document.querySelector("#deadLine").value;
     let meta = document.querySelector("#meta").value;
 
+    let url = createURL(nomeCurto);
+
     if (!!sessionStorage.getItem(idToken)) {
         fetch(URL + "/campanha",
         {
@@ -115,6 +117,45 @@ function fetchCampanha(dados) {
         $campanhas.appendChild($br);
     });
 
+}
+
+// private String createURL(String nomeCurto) {
+//     String saida = nomeCurto.replace(".", " ").replace(",", " ").replace("-", " ")
+//             .replace("_", " ");
+//     saida = Normalizer.normalize(saida, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+//     saida = saida.toLowerCase();
+//     saida = removeDuploEspaco(saida);
+//     saida = saida.replaceAll(" ", "-");
+//     return saida;
+// }
+
+// private String removeDuploEspaco(String nomeCurto) {
+//     String saida = "";
+//     for (int i = 1; i < nomeCurto.length(); i++) {
+//         if (!(nomeCurto.charAt(i) == ' ' & nomeCurto.charAt(i - 1) == ' ')) {
+//             saida += nomeCurto.charAt(i-1);
+//         }
+//     }
+//     return saida;
+// }
+
+function createURL(nomeCurto) {
+    const parsed = str.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-z])/g, '');
+    console.log(parsed);
+}
+
+function removeAcento (text)
+{       
+    text = text.toLowerCase();                                                         
+    text = text.replace(new RegExp('[ÁÀÂÃáàâã]','gi'), 'a');
+    text = text.replace(new RegExp('[ÉÈÊéèê]','gi'), 'e');
+    text = text.replace(new RegExp('[ÍÌÎíìî]','gi'), 'i');
+    text = text.replace(new RegExp('[ÓÒÔÕóòôõ]','gi'), 'o');
+    text = text.replace(new RegExp('[ÚÙÛúùû]','gi'), 'u');
+    text = text.replace(new RegExp('[Çç]','gi'), 'c');
+
+	let parsed = text.replace(/([^a-z0-9])/gm, " ");
+    return parsed;                 
 }
 
 function mudarEstado(divExibir, divOcultar) {
@@ -179,6 +220,8 @@ function desconectar() {
 
 
 (function init() {
+    console.log("aa");
+    createURL('ÁÉÍÓÚáéíóúâêîôûàèìòùÇç/.,~!@#$%&_-12345');
 
     // Botões HOME
     let $buttonHome = document.querySelector("#imagem");
