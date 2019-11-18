@@ -1,5 +1,11 @@
-body {
+*  {
+    margin:0;
+    padding:0;
+}
+
+body, html {
     background: #c1dee1;
+    height:100%;
 }
 
 header {
@@ -14,12 +20,15 @@ header {
     color: #6c9599;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 16px;
+    outline: none;
+    margin: 5px;
 }
 
 h1 {
     color: #6c9599;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 50px;
+    margin: 15px;
 }
 
 #viewer {
@@ -36,6 +45,82 @@ input {
     border-width: 2px;
     border-color: #305561;
     border-style: solid;
+    outline: none;
+    margin: 5px;
+}
+
+input[type=search] {
+	-webkit-appearance: textfield;
+	-webkit-box-sizing: content-box;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 100%;
+    
+}
+#busca input::-webkit-search-decoration,
+#busca input::-webkit-search-cancel-button {
+    display: none; 
+    
+}
+
+input[type=search] {
+	background: #ededed url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 12px center;
+	border: solid 1px #ccc;
+	padding: 9px 10px 9px 32px;
+    width: 55px;
+	
+	-webkit-border-radius: 10em;
+	-moz-border-radius: 10em;
+	border-radius: 10em;
+	
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+    transition: all .5s;
+}
+
+#busca input[type=search] {
+	width: 15px;
+	padding-left: 17px;
+	color: transparent;
+    cursor: pointer;
+    text-align: center;
+}
+
+#busca input[type=search]:hover {
+	background-color: #fff;
+}
+
+#busca input[type=search]:focus {
+	width: 400px;
+	padding-left: 32px;
+	color: #305561;;
+	background-color: #fff;
+	cursor: auto;
+}
+
+#busca input::-webkit-input-placeholder {
+	color: transparent;
+}
+
+input[type=search]:focus {
+	width: 130px;
+	background-color: #fff;
+	border-color: #305561;
+	
+	-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+	box-shadow: 0 0 5px rgba(109,207,246,.5);
+}
+
+
+#busca input:-moz-placeholder {
+	color: #999;
+}
+#busca input::-webkit-input-placeholder {
+	color: #999;
+}
+
+form {
+    text-align: center;
 }
 
 #cadastro, #login, #exibirCadastraCampanha, #campanhaCadastro, #exibePesquisarCampanha, #campanhaPesquisa {
@@ -47,6 +132,8 @@ input {
     border-width: 0px;
     border-color: #305561;
     border-style: solid;
+    outline: none;
+    margin: 5px;
 }
 
 #imagem {
@@ -54,6 +141,7 @@ input {
     width: 500px;
     height: 205px;
     border: none;
+    outline: none;
 }
 
 #resultadoBuscaCampanha {
@@ -63,4 +151,18 @@ input {
     text-align: center;
     background: #305561;
     border-radius: 20px;
+}
+
+#footer {
+    background-color: #6c9599;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: right;
+}
+
+h4 {
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 5px;
 }

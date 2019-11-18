@@ -20,7 +20,11 @@ function cadastro() {
     })
     .then(response => response.json())
     .then(dados => {
-        alert("CADASTRO REALIZADO COM SUCESSO!");
+        if (dados.status === 200) {
+            alert("CADASTRO REALIZADO COM SUCESSO!");
+        } else {
+            alert("USUARIO NÃO CADASTRADO, TENTE NOVAMENTE!");
+        }
         home();
     });
 }
@@ -65,7 +69,11 @@ function cadastraCampanha() {
         })
         .then(response => response.json())
         .then(dados => {
-            alert("CAMPANHA CADASTRADA COM SUCESSO!");
+            if (dados.status === 200) {
+                alert("CAMPANHA CADASTRADA COM SUCESSO!");
+            } else {
+                alert("CAMPANHA NÃO CADASTRADA, TENTE NOVAMENTE!");
+            }
             hall();
         });
     } else {
@@ -85,7 +93,11 @@ function pesquisaCampanha() {
         })
         .then(response => response.json())
         .then(dados => {
-            exibeResultadoBusca(dados);
+            if (dados.status === 200) {
+                exibeResultadoBusca(dados);
+            } else {
+                alert("PESQUISA NÃO REALIZADA, TENTE NOVAMENTE!");
+            }
         });
     } else {
         alert("USUÁRIO NÃO ESTÁ LOGADO!");
@@ -102,14 +114,7 @@ function exibeResultadoBusca(dados) {
         let $p = document.createElement("p");
         $p.id = "resultadoBuscaCampanha";
         $campanhas.appendChild($p);
-        $p.innerText = ("Campanha: " + element.nomeCurto + "\n" +
-                        "Descrição: " + element.descricao + "\n" +
-                        "DeadLine: " + element.deadLine + "\n" +
-                        "Status " + element.status + "\n" +
-                        "Meta: " + element.meta + "\n" +
-                        "Doações: " + element.doacoes + "\n" +
-                        "Dono: " + element.dono.primeiroNome + "\n" +
-                        "URL: " + element.url);
+        $p.innerText = ("Campanha: " + element.nomeCurto + "\n");
         $p.href = element.url;
         let $br = document.createElement("br");
         $campanhas.appendChild($br);
@@ -208,7 +213,14 @@ function hall() {
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
     $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
 
-    document.getElementById("desconectar").style.display = 'inline';
+    ajustaBotoesHeader('inline', 'none');
+}
+
+function ajustaBotoesHeader(desconectarBotao, botaoHome) {
+    document.getElementById("desconectar").style.display = desconectarBotao;
+    document.getElementById("singUp").style.display = botaoHome;
+    document.getElementById("singIn").style.display = botaoHome;
+
 }
 
 function exibeCadastraCampanha() {
@@ -230,6 +242,7 @@ function desconectar() {
     if (!!sessionStorage.getItem(idToken)) {
         sessionStorage.removeItem(idToken);
     }
+    ajustaBotoesHeader('none', 'inline');
     home();
 }
 
