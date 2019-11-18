@@ -1,8 +1,7 @@
-let $mensagemCadastro = document.querySelector("#mensagemCadastro");
-let $mensagemLogin = document.querySelector("#mensagemLogin");
-let $mensagemCadastroCampanha = document.querySelector('#mensagemCadastroCampanha');
+let $viewer = document.querySelector("#viewer");
 
 let URL = "http://ajudeproject.herokuapp.com/api/v1";
+let roteamentoCampanha = [];
 
 let idToken = "idToken";
 
@@ -61,12 +60,11 @@ function cadastraCampanha() {
         fetch(URL + "/campanha",
         {
             'method':'POST',
-            'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":${meta} }`,
+            'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":${meta}, "url":"${url}" }`,
             'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + sessionStorage.getItem(idToken)}
         })
         .then(response => response.json())
         .then(dados => {
-            let urlCampanha = dados.url;
             alert("CAMPANHA CADASTRADA COM SUCESSO!");
             hall();
         });
@@ -87,14 +85,14 @@ function pesquisaCampanha() {
         })
         .then(response => response.json())
         .then(dados => {
-            fetchCampanha(dados);
+            exibeResultadoBusca(dados);
         });
     } else {
         alert("USUÁRIO NÃO ESTÁ LOGADO!");
     }
 }
 
-function fetchCampanha(dados) {
+function exibeResultadoBusca(dados) {
     document.getElementById('pesquisarCampanha').style.display = 'none';
     document.getElementById('resultadoBusca').style.display = 'inline';
     let $campanhas = document.querySelector("#resultadoBusca");
@@ -112,40 +110,23 @@ function fetchCampanha(dados) {
                         "Doações: " + element.doacoes + "\n" +
                         "Dono: " + element.dono.primeiroNome + "\n" +
                         "URL: " + element.url);
-        
+        $p.href = element.url;
         let $br = document.createElement("br");
         $campanhas.appendChild($br);
     });
 
 }
 
-// private String createURL(String nomeCurto) {
-//     String saida = nomeCurto.replace(".", " ").replace(",", " ").replace("-", " ")
-//             .replace("_", " ");
-//     saida = Normalizer.normalize(saida, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-//     saida = saida.toLowerCase();
-//     saida = removeDuploEspaco(saida);
-//     saida = saida.replaceAll(" ", "-");
-//     return saida;
-// }
-
-// private String removeDuploEspaco(String nomeCurto) {
-//     String saida = "";
-//     for (int i = 1; i < nomeCurto.length(); i++) {
-//         if (!(nomeCurto.charAt(i) == ' ' & nomeCurto.charAt(i - 1) == ' ')) {
-//             saida += nomeCurto.charAt(i-1);
-//         }
-//     }
-//     return saida;
-// }
-
 function createURL(nomeCurto) {
-    const parsed = str.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-z])/g, '');
-    console.log(parsed);
+    let parsed = removeAcento(nomeCurto);
+    parsed = removeDuploEspaco(parsed);
+    parsed = trocaEspacoPorTraco(parsed);
+
+    return URL + "/" + parsed;
 }
 
-function removeAcento (text)
-{       
+
+function removeAcento(text) {       
     text = text.toLowerCase();                                                         
     text = text.replace(new RegExp('[ÁÀÂÃáàâã]','gi'), 'a');
     text = text.replace(new RegExp('[ÉÈÊéèê]','gi'), 'e');
@@ -156,6 +137,26 @@ function removeAcento (text)
 
 	let parsed = text.replace(/([^a-z0-9])/gm, " ");
     return parsed;                 
+}
+
+function removeDuploEspaco(string) {
+    let result = "";
+    for (let i = 1; i <= string.length; i++) {
+        if (!(string[i] === " " && string[i - 1] === " ")) {
+            result += string[i - 1]; 
+        }
+    }
+
+    return result;
+}
+
+function trocaEspacoPorTraco(string) {
+    let result = "";
+    for (let i = 0; i < string.length; i++) {
+        result += string[i].replace(" ", "-");
+    }
+
+    return result;
 }
 
 function mudarEstado(divExibir, divOcultar) {
@@ -170,45 +171,59 @@ function mudarEstado(divExibir, divOcultar) {
 }
 
 function home() {
-    if (!!sessionStorage.getItem(idToken)) {
-        hall();
-    } else {
-        document.getElementById('cadastrar').style.display = 'none';
-        document.getElementById('entrar').style.display = 'none';
-            
-        document.getElementById('singUp').style.display = 'inline';
-        document.getElementById('singIn').style.display = 'inline';
-        
-        document.getElementById('hall').style.display = 'none';
-        document.getElementById('desconectar').style.display = 'none';
-        document.getElementById('cadastrarCampanha').style.display = 'none';
-        document.getElementById('pesquisarCampanha').style.display = 'none';
-    }
+    $viewer.innerHTML = "";
+
+    let $buttonHome = document.querySelector("#imagem");
+    let $buttonSingUp = document.querySelector("#singUp");
+    let $buttonSingIn = document.querySelector("#singIn");
+
+    $buttonHome.addEventListener('click', function () { home() } );
+    $buttonSingUp.addEventListener('click', function () { cadastrarUsuario() });
+    $buttonSingIn.addEventListener('click', function () { loginUsuario() });
+}
+
+function cadastrarUsuario() {
+    let $template = templateCadastroUsuario;
+    $viewer.innerHTML = $template.innerHTML;
+
+    let $buttonCadastro = document.querySelector("#cadastro");
+    $buttonCadastro.addEventListener('click', cadastro);
+}
+
+function loginUsuario() {
+    let $template = templateLogin;
+    $viewer.innerHTML = $template.innerHTML;
+
+    let $buttonLogin = document.querySelector("#login");
+    $buttonLogin.addEventListener('click', login);
 }
 
 function hall() {
-    document.getElementById('cadastrar').style.display = 'none';
-    document.getElementById('entrar').style.display = 'none';
-    document.getElementById('singUp').style.display = 'none';
-    document.getElementById('singIn').style.display = 'none';
+    let $template = templateHall;
+    $viewer.innerHTML = $template.innerHTML;
 
-    document.getElementById('hall').style.display = 'block';
-    document.getElementById('desconectar').style.display = 'inline';
+    let $buttonDesconectar = document.querySelector("#desconectar");
+    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
 
-    document.getElementById('cadastrarCampanha').style.display = 'none';
-    document.getElementById('pesquisarCampanha').style.display = 'none';
-    document.getElementById('resultadoBusca').style.display = 'none';
+    $buttonDesconectar.addEventListener('click', function () { desconectar() });
+    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
 
+    document.getElementById("desconectar").style.display = 'inline';
 }
 
 function exibeCadastraCampanha() {
-    document.getElementById('hall').style.display = 'none';
-    document.getElementById('cadastrarCampanha').style.display = 'block';
+    let $template = templateCadastroCampanha;
+    $viewer.innerHTML = $template.innerHTML;
+
+    let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
+    $buttonCampanhaCadastro.addEventListener('click', cadastraCampanha);
+
+
 }
 
 function exibePesquisarCampanha() {
-    document.getElementById('hall').style.display = 'none';
-    document.getElementById('pesquisarCampanha').style.display = 'block';
+    let $template = templatePesquisaCampanha;
+    $viewer.innerHTML = $template.innerHTML;
 }
 
 function desconectar() {
@@ -219,41 +234,30 @@ function desconectar() {
 }
 
 
-(function init() {
-    console.log("aa");
-    createURL('ÁÉÍÓÚáéíóúâêîôûàèìòùÇç/.,~!@#$%&_-12345');
+(async function init() {
+    let data = await Promise.all([fetchTemplates()]);
 
-    // Botões HOME
-    let $buttonHome = document.querySelector("#imagem");
-    let $buttonSingUp = document.querySelector("#singUp");
-    let $buttonSingIn = document.querySelector("#singIn");
+    let hash = location.hash;
+
+    if ([""].includes(hash)) {
+        home();
+    } else if (["/login"].includes(hash)) {
+        loginUsuario();
+    } else if (["/cadastro"].includes(hash)) {
+        cadastrarUsuario();
+    }
     
-    // Botões ENVIAR FORMULÁRIO
-    let $buttonCadastro = document.querySelector("#cadastro");
-    let $buttonLogin = document.querySelector("#login");
-    
-    let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
-    let $buttonPesquisaCampanha = document.querySelector("#campanhaPesquisa");
-
-    // Botões HALL (Após Login)
-    let $buttonDesconectar = document.querySelector("#desconectar");
-    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
-    let $buttonExibirPesquisarCampanha = document.querySelector("#exibePesquisarCampanha");
-
-    // Eventos Botões HOME
-    $buttonHome.addEventListener('click', function () { home() });
-    $buttonSingUp.addEventListener('click', function () { mudarEstado('cadastrar', 'entrar') });
-    $buttonSingIn.addEventListener('click', function () { mudarEstado('entrar', 'cadastrar') });
-    
-    // Eventos Botões ENVIAR FORMULÁRIO
-    $buttonCadastro.addEventListener('click', cadastro);
-    $buttonLogin.addEventListener('click', login);
-
-    $buttonCampanhaCadastro.addEventListener('click', cadastraCampanha);
-    $buttonPesquisaCampanha.addEventListener('click', pesquisaCampanha);
-
-    // Eventos Botões HALL (Após Login)
-    $buttonDesconectar.addEventListener('click', function () { desconectar() });
-    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
-    $buttonExibirPesquisarCampanha.addEventListener('click', function () { exibePesquisarCampanha() });
 }());
+
+let templateCadastroUsuario, templateLogin, templateHall, templateCadastroCampanha, templatePesquisaCampanha;
+async function fetchTemplates() {
+    let htmlTemplates = await (fetch('templates.html').then(r => r.text()));
+    let e = document.createElement("div");
+    e.innerHTML= htmlTemplates;
+
+    templateCadastroUsuario = e.querySelector("#cadastrar");
+    templateLogin = e.querySelector("#entrar");
+    templateHall = e.querySelector("#hall");
+    templateCadastroCampanha = e.querySelector("#cadastrarCampanha");
+    templatePesquisaCampanha = e.querySelector("#pesquisarCampanha");
+}
