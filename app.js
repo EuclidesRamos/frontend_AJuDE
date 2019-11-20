@@ -1,7 +1,7 @@
 let $viewer = document.querySelector("#viewer");
 
-let URL = "http://ajudeproject.herokuapp.com/api/v1";
-let roteamentoCampanha = [];
+// let URL = "http://ajudeproject.herokuapp.com/api/v1";
+let URL = "http://localhost:8080/api/v1";
 
 let idToken = "idToken";
 
@@ -20,7 +20,7 @@ function cadastro() {
     })
     .then(response => response.json())
     .then(dados => {
-        if (dados.status === 200) {
+        if (dados.email !== null) {
             alert("CADASTRO REALIZADO COM SUCESSO!");
         } else {
             alert("USUARIO NÃO CADASTRADO, TENTE NOVAMENTE!");
@@ -58,6 +58,8 @@ function cadastraCampanha() {
     let deadLine = document.querySelector("#deadLine").value;
     let meta = document.querySelector("#meta").value;
 
+    console.log(deadLine);
+
     let url = createURL(nomeCurto);
 
     if (!!sessionStorage.getItem(idToken)) {
@@ -65,16 +67,22 @@ function cadastraCampanha() {
         {
             'method':'POST',
             'body':`{"nomeCurto":"${nomeCurto}", "descricao":"${descricao}", "deadLine":"${deadLine}", "meta":${meta}, "url":"${url}" }`,
-            'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + sessionStorage.getItem(idToken)}
+            'headers':{'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
-        .then(response => response.json())
-        .then(dados => {
-            if (dados.status === 200) {
-                alert("CAMPANHA CADASTRADA COM SUCESSO!");
-            } else {
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("CAMPANHA NÃO CADASTRADA, TENTE NOVAMENTE!");
                 alert("CAMPANHA NÃO CADASTRADA, TENTE NOVAMENTE!");
+            } else {
+                return response.json()
             }
+        })
+        .then(dados => {
+            alert("CAMPANHA CADASTRADA COM SUCESSO!");
             hall();
+        })
+        .catch(error => {
+            console.log(error);
         });
     } else {
         alert("USUÁRIO NÃO ESTÁ LOGADO!");
@@ -89,7 +97,7 @@ function pesquisaCampanha() {
         {
             'method':'GET',
             'body':`{"stringBusca":"${stringBusca}"}`,
-            'headers':{'Content-Type':'appication/json', 'Autorization': 'Bearer' + sessionStorage.getItem(idToken)}
+            'headers':{'Content-Type':'application/json', 'Authorization': 'Bearer' + sessionStorage.getItem(idToken)}
         })
         .then(response => response.json())
         .then(dados => {
@@ -176,6 +184,9 @@ function mudarEstado(divExibir, divOcultar) {
 }
 
 function home() {
+
+    location.hash = "";
+
     $viewer.innerHTML = "";
 
     let $buttonHome = document.querySelector("#imagem");
@@ -188,6 +199,8 @@ function home() {
 }
 
 function cadastrarUsuario() {
+    location.hash = "/cadastro";
+
     let $template = templateCadastroUsuario;
     $viewer.innerHTML = $template.innerHTML;
 
@@ -196,6 +209,8 @@ function cadastrarUsuario() {
 }
 
 function loginUsuario() {
+    location.hash = "/login";
+
     let $template = templateLogin;
     $viewer.innerHTML = $template.innerHTML;
 
@@ -204,6 +219,7 @@ function loginUsuario() {
 }
 
 function hall() {
+
     let $template = templateHall;
     $viewer.innerHTML = $template.innerHTML;
 
@@ -248,15 +264,17 @@ function desconectar() {
 
 
 (async function init() {
-    let data = await Promise.all([fetchTemplates()]);
+    await Promise.all([fetchTemplates()]);
 
     let hash = location.hash;
 
-    if ([""].includes(hash)) {
+    if (["", "#"].includes(hash)) {
         home();
-    } else if (["/login"].includes(hash)) {
+    } else if (["#/login"].includes(hash)) {
+        home();
         loginUsuario();
-    } else if (["/cadastro"].includes(hash)) {
+    } else if (["#/cadastro"].includes(hash)) {
+        home();
         cadastrarUsuario();
     }
     
