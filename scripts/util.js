@@ -10,7 +10,7 @@ function validaSenha(passwd) {
 }
 
 async function tokenExpirado(response) {
-    const responseText = response.text();
+    const responseText = await response.text();
     const responseJson = await JSON.parse(responseText);
 
     if (responseJson["message"].startsWith("JWT expirada")) {

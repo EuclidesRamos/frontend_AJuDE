@@ -74,9 +74,9 @@ function cadastraCampanha() {
     let descricao = document.querySelector("#descricao").value;
     let deadLine = document.querySelector("#deadLine").value;
     let meta = document.querySelector("#meta").value;
-
+    
     let url = createURL(nomeCurto);
-
+    
     if (!!sessionStorage.getItem(idToken)) {
         fetch(URL + "/campanha",
         {
@@ -85,6 +85,7 @@ function cadastraCampanha() {
             'headers':{'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
+            console.log(response);
             if (!response.ok) {
                 tokenExpirado(response);
                 throw new Error("Cadastro de Campanha não realizado. Certifique-se que colocou as informações corretamente e tente novamente.");
@@ -153,6 +154,18 @@ function getCampanha(urlCampanha) {
     }
 }
 
+function like(urlCampanha) {
+    urlCampanha = urlCampanha.substring(1);
+
+    fetch(URL + urlCampanha + "/like",
+    {
+
+    })
+
+    // em andamento
+
+}
+
 function exibeResultadoBusca(dados, stringBusca) {
 
     // location.hash = "/busca=" + stringBusca;
@@ -177,6 +190,7 @@ function exibeResultadoBusca(dados, stringBusca) {
         $p.innerText = "Campanha: " + element.nomeCurto + "\n" +
                         "Autor: " + element.autor; // Nivelar com o Back
         $p.href = element.url;
+        
         $p.addEventListener('click', function () { getCampanha(element.url); });
 
         let $br = document.createElement("br");
@@ -184,19 +198,40 @@ function exibeResultadoBusca(dados, stringBusca) {
     });
 }
 
-function exibeCampanha(urlCampanha, dados) {
 
+function exibeCampanha(urlCampanha, dados) {
+    
     location.hash = urlCampanha;
     $viewer.innerHTML = '';
     
     $div = createElement("div");
     $viewer.appendChild($div);
-
+    
     $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
-                        dados.descricao + "\n\n" +
-                        "DeadLine: " + dados.deadLine + "\n" +
-                        "Meta: " + dados.meta + "\n\n" +
-                        "Autor: " + dados.autor;
+    dados.descricao + "\n\n" +
+    "DeadLine: " + dados.deadLine + "\n" +
+    "Meta: " + dados.meta + "\n\n" +
+    "Autor: " + dados.autor;
+    
+    criaBotoes($div);
+}
+
+function criaBotoes($div) {
+    $buttonComentario = document.createElement("button");
+    $buttonLike = document.createElement("button");
+
+    $div.appendChild($buttonComentario);
+    $div.appendChild($buttonLike);
+
+    $buttonComentario.id = "buttonComentario";
+    $buttonLike.id = "buttonLike";
+        
+    $buttonComentario.addEventListener('click', function () { adicionarComentario(); });
+    $buttonLike.addEventListener('click', like(location.hash));
+}
+
+function adicionarComentario() {
+    // a fazer
 }
 
 function buscarCampanha() {
