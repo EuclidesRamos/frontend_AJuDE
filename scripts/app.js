@@ -3,8 +3,6 @@ let $viewer = document.querySelector("#viewer");
 let URL = "https://ajudeproject.herokuapp.com/api/v1";
 // let URL = "http://localhost:8080/api/v1";
 
-// let idToken = "idToken";
-
 let bufferTime = null;
 
 function cadastro() {
@@ -21,7 +19,6 @@ function cadastro() {
         alert("Senha menor que 8 caracteres. Por favor, tente com uma senha diferente");
         throw new Error("Senha menor que 8 caracteres. Por favor, tente com uma senha diferente");
     }
-
     fetch(URL + "/usuarios", 
     {
         'method':'POST',
@@ -47,7 +44,8 @@ function cadastro() {
 function login() {
     let email = document.querySelector('#emailLogin').value;
     let senha = document.querySelector('#senhaLogin').value;
-
+    console.log(URL + "/login");
+    
     fetch(URL + "/login", 
     {
         'method':'POST',
