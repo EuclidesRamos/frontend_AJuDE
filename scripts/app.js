@@ -3,7 +3,7 @@ let $viewer = document.querySelector("#viewer");
 let URL = "http://ajudeproject.herokuapp.com/api/v1";
 // let URL = "http://localhost:8080/api/v1";
 
-let idToken = "idToken";
+// let idToken = "idToken";
 
 let bufferTime = null;
 
@@ -14,6 +14,14 @@ function cadastro() {
     let cartao = document.querySelector('#cartao').value;
     let senha = document.querySelector('#senha').value;
 
+    if (!validaEmail(email)) {
+        alert("Email invalido. Por favor, certifique-se que informou corretamente e tente novamente.");
+        throw new Error("Email invalido. Por favor, certifique-se que informou corretamente e tente novamente.");
+    } else if (!validaSenha(senha)) {
+        alert("Senha menor que 8 caracteres. Por favor, tente com uma senha diferente");
+        throw new Error("Senha menor que 8 caracteres. Por favor, tente com uma senha diferente");
+    }
+
     fetch(URL + "/usuarios", 
     {
         'method':'POST',
@@ -21,14 +29,14 @@ function cadastro() {
         'headers':{'Content-Type':'application/json'}
     })
     .then(response => {
-        if (!!response.ok) {
+        if (!response.ok) {
             throw new Error("Cadastro não realizado. Certifique-se que colocou as informações corretamente e tente novamente."); 
         } else {
             return response.json();
         }
     })
     .then(dados => {
-        alert("CADASTRO REALIZADO COM SUCESSO!");
+        alert("Cadastro realizado com sucesso!");
         home();
     })
     .catch(error => {
@@ -47,7 +55,7 @@ function login() {
         'headers':{'Content-Type':'application/json'}
     })
     .then(response => {
-        if (!!response.ok) {
+        if (!response.ok) {
             throw new Error("Login não realizado. Certifique-se que colocou as informações corretamente e tente novamente."); 
         } else {
             return response.json();
@@ -80,6 +88,7 @@ function cadastraCampanha() {
         })
         .then(response => {
             if (!response.ok) {
+                tokenExpirado(response);
                 throw new Error("Cadastro de Campanha não realizado. Certifique-se que colocou as informações corretamente e tente novamente.");
             } else {
                 return response.json();
@@ -100,7 +109,7 @@ function cadastraCampanha() {
 function pesquisaCampanha() {
     let stringBusca = document.querySelector("#search").value;
 
-    fetch(URL + "",
+    fetch(URL + "", // Nivelar com o Back
     {
         'method':'GET',
         'body':`{"stringBusca":"${stringBusca}"}`,
@@ -119,6 +128,31 @@ function pesquisaCampanha() {
     .catch(error => {
         alert(error);
     })
+}
+
+function getCampanha(urlCampanha) {
+    if (sessionStorage.getItem(idToken)) {
+        fetch(URL + "/campanha" + urlCampanha,
+        {
+            'method':'GET',
+            'body': `{"urlCampanha:"${urlCampanha}"}`,
+            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => {
+            if (!response.ok) {
+                tokenExpirado(response);
+                throw new Error("Pesquisa não realizada. Certifique-se que colocou as informações corretamente e tente novamente.")
+            } else {
+                return response.json();
+            }
+        })
+        .then(dados => {
+            exibeCampanha(urlCampanha, dados);
+        })
+        .catch(error => {
+            alert(error);
+        })
+    }
 }
 
 function exibeResultadoBusca(dados, stringBusca) {
@@ -142,21 +176,29 @@ function exibeResultadoBusca(dados, stringBusca) {
         $p.id = "resultadoBuscaCampanha";
         $div.appendChild($p);
 
-        $p.innerText = "Campanha: " + element.nomeCurto + "\n";
+        $p.innerText = "Campanha: " + element.nomeCurto + "\n" +
+                        "Autor: " + element.autor; // Nivelar com o Back
         $p.href = element.url;
-        $p.addEventListener('click', function () { exibeCampanha(element.url); });
+        $p.addEventListener('click', function () { getCampanha(element.url); });
 
         let $br = document.createElement("br");
         $div.appendChild($br);
     });
 }
 
-function exibeCampanha(url) {
+function exibeCampanha(urlCampanha, dados) {
 
-    location.hash = url;
+    location.hash = urlCampanha;
     $viewer.innerHTML = '';
-    // em andamento
+    
+    $div = createElement("div");
+    $viewer.appendChild($div);
 
+    $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
+                        dados.descricao + "\n\n" +
+                        "DeadLine: " + dados.deadLine + "\n" +
+                        "Meta: " + dados.meta + "\n\n" +
+                        "Autor: " + dados.autor;
 }
 
 function buscarCampanha() {
@@ -172,41 +214,7 @@ function createURL(nomeCurto) {
     parsed = removeDuploEspaco(parsed);
     parsed = trocaEspacoPorTraco(parsed);
 
-    return URL + "/" + parsed;
-}
-
-
-function removeAcento(text) {       
-    text = text.toLowerCase();                                                         
-    text = text.replace(new RegExp('[ÁÀÂÃáàâã]','gi'), 'a');
-    text = text.replace(new RegExp('[ÉÈÊéèê]','gi'), 'e');
-    text = text.replace(new RegExp('[ÍÌÎíìî]','gi'), 'i');
-    text = text.replace(new RegExp('[ÓÒÔÕóòôõ]','gi'), 'o');
-    text = text.replace(new RegExp('[ÚÙÛúùû]','gi'), 'u');
-    text = text.replace(new RegExp('[Çç]','gi'), 'c');
-
-	let parsed = text.replace(/([^a-z0-9])/gm, " ");
-    return parsed;                 
-}
-
-function removeDuploEspaco(string) {
-    let result = "";
-    for (let i = 1; i <= string.length; i++) {
-        if (!(string[i] === " " && string[i - 1] === " ")) {
-            result += string[i - 1]; 
-        }
-    }
-
-    return result;
-}
-
-function trocaEspacoPorTraco(string) {
-    let result = "";
-    for (let i = 0; i < string.length; i++) {
-        result += string[i].replace(" ", "-");
-    }
-
-    return result;
+    return "/" + parsed;
 }
 
 function home() {
@@ -246,6 +254,8 @@ function loginUsuario() {
 
 function hall() {
 
+    location.hash = "";
+
     let $template = templateHall;
     $viewer.innerHTML = $template.innerHTML;
 
@@ -271,11 +281,6 @@ function exibeCadastraCampanha() {
 
     let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
     $buttonCampanhaCadastro.addEventListener('click', cadastraCampanha);
-}
-
-function exibePesquisarCampanha() {
-    let $template = templatePesquisaCampanha;
-    $viewer.innerHTML = $template.innerHTML;
 }
 
 function desconectar() {
@@ -308,7 +313,7 @@ function desconectar() {
     
 }());
 
-let templateCadastroUsuario, templateLogin, templateHall, templateCadastroCampanha, templatePesquisaCampanha, templateResultadoBusca;
+let templateCadastroUsuario, templateLogin, templateHall, templateCadastroCampanha, templateResultadoBusca;
 async function fetchTemplates() {
     let htmlTemplates = await (fetch('templates.html').then(r => r.text()));
     let e = document.createElement("div");
@@ -318,6 +323,5 @@ async function fetchTemplates() {
     templateLogin = e.querySelector("#entrar");
     templateHall = e.querySelector("#hall");
     templateCadastroCampanha = e.querySelector("#cadastrarCampanha");
-    templatePesquisaCampanha = e.querySelector("#pesquisarCampanha");
     templateResultadoBusca = e.querySelector("#resultadoBusca");
 }
