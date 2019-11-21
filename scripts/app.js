@@ -126,7 +126,7 @@ function pesquisaCampanha() {
     })
     .catch(error => {
         alert(error);
-    })
+    });
 }
 
 function getCampanha(urlCampanha) {
@@ -150,20 +150,63 @@ function getCampanha(urlCampanha) {
         })
         .catch(error => {
             alert(error);
-        })
+        });
     }
 }
 
-function like(urlCampanha) {
-    urlCampanha = urlCampanha.substring(1);
+function like() {
+    urlCampanha = location.hash.substring(1);
 
-    fetch(URL + urlCampanha + "/like",
-    {
+    if (!!sessionStorage.getItem(idToken)) {
+        fetch(URL + urlCampanha + "/like",
+        {
+            'method':'POST',
+            'body': {},
+            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => {
+            if (!response.ok) {
+                tokenExpirado(response);
+                throw new ("Não foi possível dar like. Por favor, tente novamente.");
+            } else {
+                return response.json();
+            }
+        })
+        .then(dados => {
 
-    })
+        })
+        .catch(error => {
+            alert(error);
+        });
+    }
+}
 
-    // em andamento
+function comentario() {
+    comentario = document.querySelector("#inputComentario").value;
+    urlCampanha = location.hash.substring(1);
 
+    if (!!sessionStorage.getItem(idToken)) {
+        fetch(URL + urlCampanha + "/comentario", 
+        {
+            'method':'POST',
+            'body': `{"comentario: "${comentario}"}`,
+            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => {
+            if (!response.ok) {
+                tokenExpirado(response);
+                throw new ("Não foi possível comentar. Por favor, tente novamente.");
+            } else {
+                return response.json();
+            }
+        })
+        .then(dados => {
+            alert("Comentario enviado.");
+        })
+        .catch(error => {
+            alert(error);
+        })
+    }
 }
 
 function exibeResultadoBusca(dados, stringBusca) {
@@ -226,12 +269,21 @@ function criaBotoes($div) {
     $buttonComentario.id = "buttonComentario";
     $buttonLike.id = "buttonLike";
         
-    $buttonComentario.addEventListener('click', function () { adicionarComentario(); });
-    $buttonLike.addEventListener('click', like(location.hash));
+    $buttonComentario.addEventListener('click', function () { adicionarComentario($div); });
+    $buttonLike.addEventListener('click', like);
 }
 
-function adicionarComentario() {
-    // a fazer
+function adicionarComentario($div) {
+    $input = document.createElement("input");
+    $buttonSend = document.createElement("button");
+    
+    $div.appendChild($input);
+    $div.appendChild($buttonSend);
+
+    $input.id = "inputComentario";
+    $buttonSend.id = "buttonSend";
+
+    $buttonSend.addEventListener('click', comentario);
 }
 
 function buscarCampanha() {
