@@ -1,6 +1,6 @@
 let $viewer = document.querySelector("#viewer");
 
-let URL = "http://ajudeproject.herokuapp.com/api/v1";
+let URL = "https://ajudeproject.herokuapp.com/api/v1";
 // let URL = "http://localhost:8080/api/v1";
 
 // let idToken = "idToken";
