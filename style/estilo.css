@@ -6,7 +6,7 @@
 body, html {
     background: #c1dee1;
     height:100%;
-}
+}  
 
 header {
     background: #6c9599;
@@ -54,6 +54,9 @@ input[type=search] {
 	-webkit-box-sizing: content-box;
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 100%;
+    /* top: 20px;
+    left: 20px;
+    position: absolute; */
     
 }
 #busca input::-webkit-search-decoration,
