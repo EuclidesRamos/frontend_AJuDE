@@ -13,22 +13,60 @@ header {
     text-align: center;
 }
 
-#singUp, #singIn, #desconectar {
+#linha {
+    height: 30px;
+    width: 2px;
+    background-color: white;
+    border: none;
+    top: 40px;
+    right: 278px;
+    position: absolute;
+}
+
+#singUp, #desconectar {
     background:white;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
     color: #6c9599;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 16px;
     outline: none;
-    margin: 5px;
+}
+
+#desconectar {
+    top: 40px;
+    right: 230px;
+    position: absolute;
+}
+
+#singIn {
+    background: transparent;
+    border: none;
+    outline: none;
+    top: 40px;
+    right: 230px;
+    position: absolute;
+}
+
+#singUp {
+    top: 40px;
+    right: 300px;
+    position: absolute;
 }
 
 h1 {
     color: #6c9599;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 50px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 40px;
     margin: 15px;
+}
+
+#divisor {
+    height: 1px;
+    width: 100%;
+    background: #305561;
+    border: none;
+    margin-bottom: 10px;
 }
 
 #viewer {
@@ -38,11 +76,11 @@ h1 {
 input {
     color: #305561;
     background: white;
-    border-radius: 20px;
+    border-radius: 10px;
     width: 200px;
     height: 25px;
     text-align: center;
-    border-width: 2px;
+    border-width: 1px;
     border-color: #305561;
     border-style: solid;
     outline: none;
@@ -54,9 +92,9 @@ input[type=search] {
 	-webkit-box-sizing: content-box;
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 100%;
-    /* top: 20px;
+    top: 27px;
     left: 20px;
-    position: absolute; */
+    position: absolute;
     
 }
 #busca input::-webkit-search-decoration,
@@ -131,18 +169,16 @@ form {
     background: #305561;
     width: 200px;
     height: 30px;
-    border-radius: 20px;
-    border-width: 0px;
-    border-color: #305561;
-    border-style: solid;
+    border-radius: 10px;
+    border: none;
     outline: none;
     margin: 5px;
 }
 
 #imagem {
     background: transparent;
-    width: 500px;
-    height: 205px;
+    width: 250px;
+    height: 105px;
     border: none;
     outline: none;
 }
@@ -164,8 +200,8 @@ form {
     text-align: right;
 }
 
-h4 {
+#paragrafoFooter {
     color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    margin: 5px;
+    margin: 10px;
 }
