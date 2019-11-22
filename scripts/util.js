@@ -16,7 +16,7 @@ async function tokenExpirado(response) {
     if (responseJson["message"].startsWith("JWT expirada")) {
         sessionStorage.removeItem(idToken);
 
-        throw new Error("Token expirado, faça o login para continuar.");
+        throw new Error("Sessão expirado, faça o login para continuar.");
       }
 
 }

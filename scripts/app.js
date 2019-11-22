@@ -1,7 +1,5 @@
-let $viewer = document.querySelector("#viewer");
-
-let URL = "https://ajudeproject.herokuapp.com/api/v1";
-// let URL = "http://localhost:8080/api/v1";
+// let URL = "https://ajudeproject.herokuapp.com/api/v1";
+let URL = "http://localhost:8080/api/v1";
 
 let bufferTime = null;
 
@@ -107,12 +105,13 @@ function cadastraCampanha() {
 
 function pesquisaCampanha() {
     let stringBusca = document.querySelector("#search").value;
+    console.log(stringBusca);
 
-    fetch(URL + "", // Nivelar com o Back
+    let urlMethod = "/campanha/busca/" + stringBusca;
+    fetch(URL + urlMethod,
     {
         'method':'GET',
-        'body':`{"stringBusca":"${stringBusca}"}`,
-        'headers':{'Content-Type':'application/json'}
+        'headers':{'Content-Type':'text/plain'}
     })
     .then(response => {
         if (!response.ok) {
@@ -130,12 +129,11 @@ function pesquisaCampanha() {
 }
 
 function getCampanha(urlCampanha) {
-    if (sessionStorage.getItem(idToken)) {
+    if (!!sessionStorage.getItem(idToken)) {
         fetch(URL + "/campanha" + urlCampanha,
         {
             'method':'GET',
-            'body': `{"urlCampanha:"${urlCampanha}"}`,
-            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+            'headers': {'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
             if (!response.ok) {
@@ -151,6 +149,8 @@ function getCampanha(urlCampanha) {
         .catch(error => {
             alert(error);
         });
+    } else {
+        alert("É necessário realizar login para continuar.");
     }
 }
 
@@ -214,13 +214,13 @@ function exibeResultadoBusca(dados, stringBusca) {
     // location.hash = "/busca=" + stringBusca;
     $viewer.innerHTML = '';
 
-    document.getElementById('pesquisarCampanha').style.display = 'none';
+    // document.getElementById('busca').style.display = 'none';
     
     let $h1 = document.createElement("h1");
     $viewer.appendChild($h1);
     $h1.innerText = "Resultado da busca para - " + stringBusca + " -";
 
-    let $div = document.createElement(div);
+    let $div = document.createElement("div");
     $viewer.appendChild($div);
 
     $div.innerHTML = '';
@@ -230,8 +230,7 @@ function exibeResultadoBusca(dados, stringBusca) {
         $p.id = "resultadoBuscaCampanha";
         $div.appendChild($p);
 
-        $p.innerText = "Campanha: " + element.nomeCurto + "\n" +
-                        "Autor: " + element.autor; // Nivelar com o Back
+        $p.innerText = "Campanha: " + element.nomeCurto + "\n";
         $p.href = element.url;
         
         $p.addEventListener('click', function () { getCampanha(element.url); });
@@ -247,13 +246,13 @@ function exibeCampanha(urlCampanha, dados) {
     location.hash = urlCampanha;
     $viewer.innerHTML = '';
     
-    $div = createElement("div");
+    $div = document.createElement("div");
     $viewer.appendChild($div);
     
     $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
-    dados.descricao + "\n\n" +
+    "Descrição: " + dados.descricao + "\n \n" +
     "DeadLine: " + dados.deadLine + "\n" +
-    "Meta: " + dados.meta + "\n\n" +
+    "Meta: " + dados.meta + "\n \n" +
     "Autor: " + dados.autor;
     
     criaBotoes($div);
@@ -302,72 +301,6 @@ function createURL(nomeCurto) {
     return "/" + parsed;
 }
 
-function home() {
-
-    location.hash = "";
-
-    $viewer.innerHTML = "";
-
-    let $buttonHome = document.querySelector("#imagem");
-    let $buttonSingUp = document.querySelector("#singUp");
-    let $buttonSingIn = document.querySelector("#singIn");
-
-    $buttonHome.addEventListener('click', function () { home() } );
-    $buttonSingUp.addEventListener('click', function () { cadastrarUsuario() });
-    $buttonSingIn.addEventListener('click', function () { loginUsuario() });
-}
-
-function cadastrarUsuario() {
-    location.hash = "/cadastro";
-
-    let $template = templateCadastroUsuario;
-    $viewer.innerHTML = $template.innerHTML;
-
-    let $buttonCadastro = document.querySelector("#cadastro");
-    $buttonCadastro.addEventListener('click', cadastro);
-}
-
-function loginUsuario() {
-    location.hash = "/login";
-
-    let $template = templateLogin;
-    $viewer.innerHTML = $template.innerHTML;
-
-    let $buttonLogin = document.querySelector("#login");
-    $buttonLogin.addEventListener('click', login);
-}
-
-function hall() {
-
-    location.hash = "";
-
-    let $template = templateHall;
-    $viewer.innerHTML = $template.innerHTML;
-
-    let $buttonDesconectar = document.querySelector("#desconectar");
-    let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
-
-    $buttonDesconectar.addEventListener('click', function () { desconectar() });
-    $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
-
-    ajustaBotoesHeader('inline', 'none');
-}
-
-function ajustaBotoesHeader(desconectarBotao, botaoHome) {
-    document.getElementById("desconectar").style.display = desconectarBotao;
-    document.getElementById("singUp").style.display = botaoHome;
-    document.getElementById("singIn").style.display = botaoHome;
-
-}
-
-function exibeCadastraCampanha() {
-    let $template = templateCadastroCampanha;
-    $viewer.innerHTML = $template.innerHTML;
-
-    let $buttonCampanhaCadastro = document.querySelector('#campanhaCadastro');
-    $buttonCampanhaCadastro.addEventListener('click', cadastraCampanha);
-}
-
 function desconectar() {
     if (!!sessionStorage.getItem(idToken)) {
         sessionStorage.removeItem(idToken);
@@ -379,6 +312,8 @@ function desconectar() {
 
 (async function init() {
     await Promise.all([fetchTemplates()]);
+    
+    sessionStorage.clear();
 
     let $campoBusca = document.querySelector("#search");
     $campoBusca.addEventListener('keyup', function () { buscarCampanha(); })
