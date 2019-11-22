@@ -23,7 +23,7 @@ header {
     position: absolute;
 }
 
-#singUp, #desconectar {
+#singUp, #desconectar  {
     background:white;
     border-radius: 10px;
     border: none;
@@ -175,6 +175,17 @@ form {
     margin: 5px;
 }
 
+#buttonLike, #buttonSend, #buttonComentario {
+    color: #305561;
+    background: white;
+    width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin: 5px;
+}
+
 #imagem {
     background: transparent;
     width: 250px;
@@ -185,11 +196,18 @@ form {
 
 #resultadoBuscaCampanha {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 16px;
-    color: white;
+    font-size: 15px;
+    color: #305561;
     text-align: center;
-    background: #305561;
-    border-radius: 20px;
+    top: 8px;
+    position: relative;
+}
+
+#quadrado {
+    background-color: white;
+    text-align: center;
+    margin: 10px;
+    height: 35px;
 }
 
 #footer {
@@ -204,4 +222,20 @@ form {
     color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: 10px;
+}
+
+#result {
+    width: 220px;
+    height: 35px;
+    text-align: center;
+}
+
+#divCampanha {
+    width: 500px;
+    height: 400px;
+    background-color: #6c9599;
+    color:white;
+    text-align: center;
+    margin: 20px;
+    position: relative;
 }

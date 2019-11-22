@@ -44,7 +44,9 @@ function hall() {
 
     let $buttonDesconectar = document.querySelector("#desconectar");
     let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
+    let $buttonHome = document.querySelector("#imagem");
 
+    $buttonHome.addEventListener('click', function () { hall() } );
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
     $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
 

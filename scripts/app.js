@@ -42,7 +42,6 @@ function cadastro() {
 function login() {
     let email = document.querySelector('#emailLogin').value;
     let senha = document.querySelector('#senhaLogin').value;
-    console.log(URL + "/login");
     
     fetch(URL + "/login", 
     {
@@ -130,7 +129,7 @@ function pesquisaCampanha() {
 
 function getCampanha(urlCampanha) {
     if (!!sessionStorage.getItem(idToken)) {
-        fetch(URL + "/campanha" + urlCampanha,
+        fetch(URL + "/campanha/" + urlCampanha,
         {
             'method':'GET',
             'headers': {'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
@@ -158,7 +157,7 @@ function like() {
     urlCampanha = location.hash.substring(1);
 
     if (!!sessionStorage.getItem(idToken)) {
-        fetch(URL + urlCampanha + "/like",
+        fetch(URL + "/" + urlCampanha + "/like",
         {
             'method':'POST',
             'body': {},
@@ -186,7 +185,7 @@ function comentario() {
     urlCampanha = location.hash.substring(1);
 
     if (!!sessionStorage.getItem(idToken)) {
-        fetch(URL + urlCampanha + "/comentario", 
+        fetch(URL + "/" + urlCampanha + "/comentario", 
         {
             'method':'POST',
             'body': `{"comentario: "${comentario}"}`,
@@ -202,6 +201,7 @@ function comentario() {
         })
         .then(dados => {
             alert("Comentario enviado.");
+            getCampanha(urlCampanha);
         })
         .catch(error => {
             alert(error);
@@ -213,30 +213,30 @@ function exibeResultadoBusca(dados, stringBusca) {
 
     // location.hash = "/busca=" + stringBusca;
     $viewer.innerHTML = '';
-
-    // document.getElementById('busca').style.display = 'none';
     
     let $h1 = document.createElement("h1");
     $viewer.appendChild($h1);
     $h1.innerText = "Resultado da busca para - " + stringBusca + " -";
 
     let $div = document.createElement("div");
+    $div.id = "result";
     $viewer.appendChild($div);
 
     $div.innerHTML = '';
 
     dados.forEach(element => {
+        let $divQuadrado = document.createElement("div");
+        $divQuadrado.id = "quadrado";
+        $div.appendChild($divQuadrado);
+
         let $p = document.createElement("p");
         $p.id = "resultadoBuscaCampanha";
-        $div.appendChild($p);
+        $divQuadrado.appendChild($p);
 
-        $p.innerText = "Campanha: " + element.nomeCurto + "\n";
+        $p.innerText = element.nomeCurto;
         $p.href = element.url;
         
         $p.addEventListener('click', function () { getCampanha(element.url); });
-
-        let $br = document.createElement("br");
-        $div.appendChild($br);
     });
 }
 
@@ -246,16 +246,21 @@ function exibeCampanha(urlCampanha, dados) {
     location.hash = urlCampanha;
     $viewer.innerHTML = '';
     
-    $div = document.createElement("div");
-    $viewer.appendChild($div);
+    $p = document.createElement("p");
+    $viewer.appendChild($p);
+    $p.id = "divCampanha";
+
     
-    $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
+    $p.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
     "Descrição: " + dados.descricao + "\n \n" +
     "DeadLine: " + dados.deadLine + "\n" +
     "Meta: " + dados.meta + "\n \n" +
-    "Autor: " + dados.autor;
+    "Autor: " + dados.autor + "\n";
     
-    criaBotoes($div);
+    $buttonComentario = document.createElement("button");
+    $buttonLike = document.createElement("button");
+
+    criaBotoes($p);
 }
 
 function criaBotoes($div) {
@@ -267,20 +272,29 @@ function criaBotoes($div) {
 
     $buttonComentario.id = "buttonComentario";
     $buttonLike.id = "buttonLike";
+
+    $buttonComentario.innerText = "COMENTAR";
+    $buttonLike.innerText = "CURTIR";
         
     $buttonComentario.addEventListener('click', function () { adicionarComentario($div); });
     $buttonLike.addEventListener('click', like);
 }
 
 function adicionarComentario($div) {
+    $div.appendChild(document.createElement("br"));
+
     $input = document.createElement("input");
     $buttonSend = document.createElement("button");
+    $buttonSend.id = "buttonSend";
     
     $div.appendChild($input);
+    $div.appendChild(document.createElement("br"));
     $div.appendChild($buttonSend);
 
     $input.id = "inputComentario";
-    $buttonSend.id = "buttonSend";
+
+    $input.placeholder = "Escreva seu comentário aqui";
+    $buttonSend.innerText = "ENVIAR!";
 
     $buttonSend.addEventListener('click', comentario);
 }
@@ -298,7 +312,7 @@ function createURL(nomeCurto) {
     parsed = removeDuploEspaco(parsed);
     parsed = trocaEspacoPorTraco(parsed);
 
-    return "/" + parsed;
+    return parsed;
 }
 
 function desconectar() {
@@ -329,6 +343,8 @@ function desconectar() {
     } else if (["#/cadastro"].includes(hash)) {
         home();
         cadastrarUsuario();
+    } else {
+        home();
     }
     
 }());
