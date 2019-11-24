@@ -184,7 +184,7 @@ function like() {
 }
 
 function comentario() {
-    let comentario = document.querySelector("#inputComentario").value;
+    let textoComentario = document.querySelector("#inputComentario").value;
     let urlCampanha = location.hash.substring(2);
 
     console.log(urlCampanha);
@@ -192,7 +192,7 @@ function comentario() {
         fetch(URL + "/campanha/" + urlCampanha + "/comentario", 
         {
             'method':'POST',
-            'body': `{"comentario":"${comentario}"}`,
+            'body': `{"textoComentario":"${textoComentario}"}`,
             'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
@@ -214,14 +214,14 @@ function comentario() {
 }
 
 function resposta(idComent) {
-    let resposta = document.querySelector("#sendResposta").value;
+    let textoResposta = document.querySelector("#sendResposta").value;
     let urlCampanha = location.hash.substring(2);
 
     if (!!sessionStorage.getItem(idToken)) {
         fetch(URL + "/campanha/" + urlCampanha + "/comentario/" + idComent, 
         {
             'method':'POST',
-            'body':`{"resposta":"${resposta}"}`,
+            'body':`{"textoResposta":"${textoResposta}"}`,
             'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
