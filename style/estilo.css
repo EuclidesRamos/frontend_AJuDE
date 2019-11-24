@@ -78,7 +78,7 @@ input {
     background: white;
     border-radius: 10px;
     width: 200px;
-    height: 25px;
+    height: 30px;
     text-align: center;
     border-width: 1px;
     border-color: #305561;
@@ -175,7 +175,7 @@ form {
     margin: 5px;
 }
 
-#buttonLike, #buttonSend, #buttonComentario {
+#buttonLike, #buttonSend, #buttonComentario, #sendResposta {
     color: #305561;
     background: white;
     width: 200px;
@@ -208,11 +208,15 @@ form {
     text-align: center;
     margin: 10px;
     height: 35px;
+    border-width: 1px;
+    border-color: #305561;
+    border-style: solid;
+    border-radius: 10px;
 }
 
 #footer {
     background-color: #6c9599;
-    position: absolute;
+    position: fixed;
     width: 100%;
     bottom: 0;
     text-align: right;
@@ -231,11 +235,31 @@ form {
 }
 
 #divCampanha {
-    width: 500px;
-    height: 400px;
     background-color: #6c9599;
     color:white;
     text-align: center;
     margin: 20px;
     position: relative;
+    border-radius: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.comentario {
+    background-color: white;
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 5px;
+}
+
+#pResposta {
+    background-color: white;
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    margin: 10px;
+    height: 35px;
+    border-width: 1px;
+    border-color: #305561;
+    border-style: solid;
+    border-radius: 10px;
 }
