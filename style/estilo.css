@@ -39,7 +39,7 @@ header {
     position: absolute;
 }
 
-#singIn {
+#singIn, #home {
     background: transparent;
     border: none;
     outline: none;
@@ -48,7 +48,7 @@ header {
     position: absolute;
 }
 
-#singUp {
+#singUp, #desconectar {
     top: 40px;
     right: 300px;
     position: absolute;
@@ -164,7 +164,7 @@ form {
     text-align: center;
 }
 
-#cadastro, #login, #exibirCadastraCampanha, #campanhaCadastro, #exibePesquisarCampanha, #campanhaPesquisa {
+#cadastro, #login, #exibirCadastraCampanha, #campanhaCadastro, #exibePesquisarCampanha, #campanhaPesquisa, #sendDoacao {
     color: white;
     background: #305561;
     width: 200px;
@@ -175,7 +175,7 @@ form {
     margin: 5px;
 }
 
-#buttonLike, #buttonSend, #buttonComentario, #sendResposta {
+#buttonLike, #buttonSend, #buttonComentario, #sendResposta, #buttonDoar, #buttonDoadores {
     color: #305561;
     background: white;
     width: 200px;
@@ -262,4 +262,36 @@ form {
     border-color: #305561;
     border-style: solid;
     border-radius: 10px;
+}
+
+#buttonDelete {
+    color: #b61a05;
+    background: white;
+    width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin: 5px;
+}
+
+#nomeDoador {
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 30px;
+}
+
+#buttonDeleteResposta {
+    color: #b61a05;
+    background: white;
+    width: 100px;
+    height: 15px;
+    border-radius: 10px;
+    object-position: right;
+    border: none;
+    outline: none;
+    margin: 5px;
+    right: 1px;
+    top: 2px;
+    position: relative;
 }

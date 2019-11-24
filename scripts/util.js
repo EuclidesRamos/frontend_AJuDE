@@ -53,3 +53,7 @@ function trocaEspacoPorTraco(string) {
 
     return result;
 }
+
+function isNumber(input) {
+    return !isNaN(parseFloat(input)) && isFinite(input);
+}
