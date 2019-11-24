@@ -1,7 +1,6 @@
 // const URL = "https://ajudeproject.herokuapp.com/api/v1";
 const URL = "http://localhost:8080/api/v1";
 let bufferTime = null;
-let boolean = true;
 
 function cadastro() {
     let primeiroNome = document.querySelector('#primeiroNome').value;
@@ -10,7 +9,7 @@ function cadastro() {
     let cartao = document.querySelector('#cartao').value;
     let senha = document.querySelector('#senha').value;
 
-    let URLUser = createURL(primeiroNome + " " + ultimoNome);
+    let urlUser = createURL(primeiroNome + " " + ultimoNome);
 
     if (!validaEmail(email)) {
         alert("Email invalido. Por favor, certifique-se que informou corretamente e tente novamente.");
@@ -22,7 +21,7 @@ function cadastro() {
     fetch(URL + "/usuarios", 
     {
         'method':'POST',
-        'body':`{"primeiroNome":"${primeiroNome}", "ultimoNome":"${ultimoNome}", "email":"${email}", "numCartao":"${cartao}", "senha":"${senha}", "URLUser":"${URLUser}"}`,
+        'body':`{"primeiroNome":"${primeiroNome}", "ultimoNome":"${ultimoNome}", "email":"${email}", "numCartao":"${cartao}", "senha":"${senha}", "urlUser":"${urlUser}"}`,
         'headers':{'Content-Type':'application/json'}
     })
     .then(response => {
@@ -33,6 +32,8 @@ function cadastro() {
         }
     })
     .then(dados => {
+        console.log(dados);
+        roteamentoUser.push("#/" + dados.URLUser);
         alert("Cadastro realizado com sucesso!");
         home();
     })
@@ -85,7 +86,6 @@ function cadastraCampanha() {
             'headers':{'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
-            console.log(response);
             if (!response.ok) {
                 tokenExpirado(response);
                 throw new Error("Cadastro de Campanha não realizado. Certifique-se que colocou as informações corretamente e tente novamente.");
@@ -94,7 +94,7 @@ function cadastraCampanha() {
             }
         })
         .then(dados => {
-            sessionStorage.getItem("roteamentoCampanha").push(("#/" + url));
+            roteamentoCampanha.push("#/" + dados.url);
             alert("Campanha cadastrada com sucesso!");
             hall();
         })
@@ -106,8 +106,7 @@ function cadastraCampanha() {
     }
 }
 
-function pesquisaCampanha() {
-    let stringBusca = document.querySelector("#search").value;
+function pesquisaCampanha(stringBusca) {
 
     let urlMethod = "/campanha/busca/" + stringBusca;
     fetch(URL + urlMethod,
@@ -169,7 +168,7 @@ function like() {
         .then(response => {
             if (!response.ok) {
                 tokenExpirado(response);
-                throw new ("Não foi possível dar like. Por favor, tente novamente.");
+                throw new Error("Não foi possível dar like. Por favor, tente novamente.");
             } else {
                 return response.json();
             }
@@ -213,8 +212,12 @@ function comentario() {
     }
 }
 
+function comentarioDelete() {
+    // A fazer
+}
+
 function resposta(idComent) {
-    let textoResposta = document.querySelector("#sendResposta").value;
+    let textoResposta = document.querySelector("#inputResposta").value;
     let urlCampanha = location.hash.substring(2);
 
     if (!!sessionStorage.getItem(idToken)) {
@@ -240,13 +243,45 @@ function resposta(idComent) {
             alert(error);
         })
     }
-    
+}
 
+function doar() {
+    let valorDoacao = document.querySelector("#inputDoacao").value;
+    let url = location.hash.substring(2);
+    
+    let now = new Date();
+    let date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
+
+    if (isNumber(valorDoacao)) {
+        if (!!sessionStorage.getItem(idToken)) {
+            fetch(URL + "/campanha/" + url,
+            {
+                'method':'POST',
+                'body':`{"dataDeDoacao":"${date}","quantia":"${valorDoacao}"}`,
+                'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    tokenExpirado(response);
+                    throw new Error("Não foi possível realizar a doação. Por favor, tente novamente.");
+                } else {
+                    return response.json();
+                }
+            })
+            .then(dados => {
+                console.log(dados);
+                alert("Doação realizada. Obrigado!");
+            })
+            .catch(error => {
+                alert(error);
+            })
+        }
+    }
 }
 
 function exibeResultadoBusca(dados, stringBusca) {
 
-    // location.hash = "/busca=" + stringBusca;
+    location.hash = "/busca/" + stringBusca;
     $viewer.innerHTML = '';
     
     let $h1 = document.createElement("h1");
@@ -270,125 +305,16 @@ function exibeResultadoBusca(dados, stringBusca) {
     });
 }
 
-function exibeCampanha(urlCampanha, dados) {
-    
-    location.hash = "/" + urlCampanha;
-    $viewer.innerHTML = '';
-    
-    $div = document.createElement("div");
-    $viewer.appendChild($div);
-    $div.id = "divCampanha";
-    
-    $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
-    "Descrição: " + dados.descricao + "\n \n" +
-    "DeadLine: " + dados.deadLine + "\n" +
-    "Meta: " + dados.meta + "\n \n" +
-    "Autor: " + dados.infoDono.primeiroNome + " " + dados.infoDono.ultimoNome + "\n" +
-    "Likes: " + dados.numeroDeLikes + "\n";
-
-    if (dados.comentarios.length !== 0) {
-        dados.comentarios.forEach(comentario => {
-            $div.appendChild(document.createElement("hr"));
-            $p = document.createElement("p");
-            $p.id = "comentario" + comentario.idComent;
-            $p.class = "comentario";
-            
-            $div.appendChild($p);
-
-            $p.innerText = comentario.donoComentario.primeiroNome + " " + comentario.donoComentario.ultimoNome + ":\n" +
-                            comentario.textoComentario + "\n";
-
-            $buttonResposta = document.createElement("button");
-            $buttonResposta.id = "buttonComentario";
-            $buttonResposta.innerText = "Exibir Respostas";
-
-            $p.appendChild($buttonResposta);
-            $buttonResposta.addEventListener('click', function () {
-                if (boolean) {
-                    exibeRespostas(comentario.respostas, comentario.idComent);
-                    boolean = false;
-                }
-            })
-        });
-        $div.appendChild(document.createElement("hr"));
-    }
-
-    criaBotoes($div, dados.infoDono.email);
-}
-
-function criaBotoes($div, emailDono) {
-    $buttonComentario = document.createElement("button");
-    $buttonLike = document.createElement("button");
-
-    $div.appendChild($buttonComentario);
-    $div.appendChild($buttonLike);
-
-    $buttonComentario.id = "buttonComentario";
-    $buttonLike.id = "buttonLike";
-
-    $buttonComentario.innerText = "COMENTAR";
-    
-    $buttonLike.innerText = "CURTIR/DESCURTIR";
-        
-    $buttonComentario.addEventListener('click', function () { adicionarComentario($div); });
-    $buttonLike.addEventListener('click', like);
-}
-
-function adicionarComentario($div) {
-    $div.appendChild(document.createElement("br"));
-
-    $input = document.createElement("input");
-    $buttonSend = document.createElement("button");
-    $buttonSend.id = "buttonSend";
-    
-    $div.appendChild($input);
-    $div.appendChild(document.createElement("br"));
-    $div.appendChild($buttonSend);
-
-    $input.id = "inputComentario";
-
-    $input.placeholder = "Escreva seu comentário aqui";
-    $buttonSend.innerText = "ENVIAR!";
-
-    $buttonSend.addEventListener('click', comentario);
-}
-
-function exibeRespostas(respostas, idComentario) {
-
-    $p = document.querySelector("#comentario" + idComentario);
-
-    $inputResposta = document.createElement("input");
-    $sendResposta = document.createElement("button");
-    
-    $p.appendChild(document.createElement("br"));
-    $p.appendChild($inputResposta);
-    $p.appendChild($sendResposta);
-    $p.appendChild(document.createElement("br"));
-
-    $inputResposta.placeholder = "Escreva sua resposta aqui";
-    $sendResposta.innerText = "ENVIAR RESPOSTA!";
-    
-
-    $sendResposta.id = "sendResposta";
-    $sendResposta.addEventListener('click', function () {
-        resposta(idComentario);
-    });
-
-    respostas.forEach(resposta => {
-        $pResposta = document.createElement("p");
-        $pResposta.id = "pResposta";
-        $p.appendChild($pResposta);
-
-        $pResposta.innerText = resposta.donoResposta.primeiroNome + resposta.donoResposta.ultimoNome + ":\n" + resposta.textoResposta;
-    })
-}
-
 function buscarCampanha() {
     if (bufferTime != null) {
         clearTimeout(bufferTime);
     }
 
-    bufferTime = setTimeout(pesquisaCampanha, 400);
+    
+    bufferTime = setTimeout(function () {
+        let stringBusca = document.querySelector("#search").value;
+        pesquisaCampanha(stringBusca);
+    }, 500);
 }
 
 function createURL(nomeCurto) {
@@ -400,8 +326,9 @@ function createURL(nomeCurto) {
 }
 
 function desconectar() {
-    if (!!sessionStorage.getItem(idToken)) {
+    if (!!sessionStorage.getItem(idToken) && !!sessionStorage.getItem("email")) {
         sessionStorage.removeItem(idToken);
+        sessionStorage.removeItem("email");
     }
     ajustaBotoesHeader('none', 'inline');
     home();
@@ -411,29 +338,34 @@ function desconectar() {
 (async function init() {
     await Promise.all([fetchTemplates()]);
     
-    sessionStorage.setItem("roteamentoCampanha", []);
+    await recuperaDados(); // Recupera todas as urls de todas as campanhas e usuários já cadastrados
 
     let $campoBusca = document.querySelector("#search");
     $campoBusca.addEventListener('keyup', function () { buscarCampanha(); })
 
-    let hash = location.hash;
-    
-    console.log(hash);
+    await roteamento();    
+}());
 
+function roteamento() {
+    let hash = location.hash;
+
+    home(false);
     if (["", "#"].includes(hash)) {
-        home();
+        home(true);
     } else if (["#/login"].includes(hash)) {
-        home();
         loginUsuario();
     } else if (["#/cadastro"].includes(hash)) {
-        home();
         cadastrarUsuario();
-    } else if (sessionStorage.getItem("roteamentoCampanha").includes(hash)){
-        home();
-        console.log("entrei");
+    } else if (roteamentoCampanha.includes(hash)) {
         getCampanha(hash.substring(2));
+    } else if (roteamentoUser.includes(hash)) {
+        console.log("errado");
+        // a fazer
+    } else if (["busca"].includes(hash.split("/")[1])) {
+        console.log("errado");
+        pesquisaCampanha(hash.split("/")[2]);
     }
-}());
+}
 
 let templateCadastroUsuario, templateLogin, templateHall, templateCadastroCampanha, templateResultadoBusca;
 async function fetchTemplates() {

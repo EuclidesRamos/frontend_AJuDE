@@ -1,8 +1,10 @@
 let $viewer = document.querySelector("#viewer");
 
-function home() {
+function home(boolean) {
 
-    location.hash = "";
+    if (boolean) {
+        location.hash = "";
+    }
 
     $viewer.innerHTML = "";
 
@@ -10,7 +12,7 @@ function home() {
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
 
-    $buttonHome.addEventListener('click', function () { home() } );
+    $buttonHome.addEventListener('click', function () { home(true); });
     $buttonSingUp.addEventListener('click', function () { cadastrarUsuario() });
     $buttonSingIn.addEventListener('click', function () { loginUsuario() });
 }
@@ -42,11 +44,12 @@ function hall() {
     let $template = templateHall;
     $viewer.innerHTML = $template.innerHTML;
 
+    let $buttonHome = document.querySelector("#home");
     let $buttonDesconectar = document.querySelector("#desconectar");
     let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
-    let $buttonHome = document.querySelector("#imagem");
 
-    $buttonHome.addEventListener('click', function () { hall() } );
+    $buttonHome.style.display = "inline";
+    $buttonHome.addEventListener('click', function () { hall() });
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
     $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
 
