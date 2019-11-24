@@ -10,13 +10,13 @@ function validaSenha(passwd) {
 }
 
 async function tokenExpirado(response) {
-    const responseText = response.text();
+    const responseText = await response.text();
     const responseJson = await JSON.parse(responseText);
 
-    if (responseJson["message"].startsWith("JWT expirada")) {
+    if (responseJson["message"].startsWith("JWT expired")) {
         sessionStorage.removeItem(idToken);
 
-        throw new Error("Token expirado, faça o login para continuar.");
+        throw new Error("Sessão expirada, faça o login para continuar.");
       }
 
 }
