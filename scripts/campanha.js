@@ -1,4 +1,5 @@
-let boolean = true;
+let respostaAberta = false;
+let comentarioAberto = false;
 
 function exibeCampanha(urlCampanha, dados) {
     
@@ -13,6 +14,7 @@ function exibeCampanha(urlCampanha, dados) {
     
     $div.innerText = "Campanha: " + dados.nomeCurto + "\n\n" +
     "Descrição: " + dados.descricao + "\n\n" +
+    "Status: " + dados.status + "\n" +
     "DeadLine: " + dados.deadLine + "\n" +
     "Meta: " + dados.meta + "\n" +
     "Doações feitas: " + dados.doacoes + "\n\n" +
@@ -39,7 +41,7 @@ function exibeCampanha(urlCampanha, dados) {
             $div.appendChild(document.createElement("hr"));
             $p = document.createElement("p");
             $p.id = "comentario" + comentario.idComent;
-            $p.class = "comentario";
+            $p.class = "comentario"; // Confirmar alteração.
             
             $div.appendChild($p);
 
@@ -55,14 +57,14 @@ function exibeCampanha(urlCampanha, dados) {
                 $buttonDelete.addEventListener('click', comentarioDelete);
             }
             $buttonResposta = document.createElement("button");
-            $buttonResposta.id = "buttonComentario";
+            $buttonResposta.id = "buttonResposta" + comentario.idComent;
             $buttonResposta.innerText = "Exibir Respostas";
 
             $p.appendChild($buttonResposta);
             $buttonResposta.addEventListener('click', function () {
-                if (boolean) {
+                if (!respostaAberta) {
                     exibeRespostas(comentario.respostas, comentario.idComent);
-                    boolean = false;
+                    respostaAberta = true;
                 }
             })
         });
@@ -87,10 +89,17 @@ function criaBotoes($div, emailDono) {
     $buttonLike.innerText = "CURTIR/DESCURTIR";
         
     $buttonComentario.addEventListener('click', function () { adicionarComentario($div); });
-    $buttonLike.addEventListener('click', like);
+    $buttonLike.addEventListener('click', function () { setLike(); });
+}
+
+function setLike() {
+    comentarioAberto = false;
+    respostaAberta = false;
+    like();
 }
 
 function adicionarComentario($div) {
+    if (!comentarioAberto) {
     $div.appendChild(document.createElement("br"));
 
     $input = document.createElement("input");
@@ -106,13 +115,20 @@ function adicionarComentario($div) {
     $input.placeholder = "Escreva seu comentário aqui";
     $buttonSend.innerText = "ENVIAR!";
 
-    $buttonSend.addEventListener('click', comentario);
+    $buttonSend.addEventListener('click', function () { enviarComentario(); });
+    comentarioAberto = true;
+    }
+}
+
+function enviarComentario() {
+    comentarioAberto = false;
+    respostaAberta = false;
+    comentario();
 }
 
 function exibeRespostas(respostas, idComentario) {
-
     $p = document.querySelector("#comentario" + idComentario);
-
+    
     $inputResposta = document.createElement("input");
     $sendResposta = document.createElement("button");
     
@@ -120,7 +136,7 @@ function exibeRespostas(respostas, idComentario) {
     $p.appendChild($inputResposta);
     $p.appendChild($sendResposta);
     $p.appendChild(document.createElement("br"));
-
+    
     $inputResposta.placeholder = "Escreva sua resposta aqui";
     $sendResposta.innerText = "ENVIAR RESPOSTA!";
     
@@ -134,15 +150,15 @@ function exibeRespostas(respostas, idComentario) {
         $pResposta = document.createElement("p");
         $pResposta.id = "pResposta";
         $p.appendChild($pResposta);
-
+    
         $pResposta.innerText = resposta.donoResposta.primeiroNome + resposta.donoResposta.ultimoNome + ":\n" + resposta.textoResposta + "\n";
-
+    
         // if (resposta.donoResposta.email === sessionStorage.getItem("email")) {
         //     $buttonDelete = document.createElement("button");
         //     $buttonDelete.id = "buttonDeleteResposta";
         //     $buttonDelete.innerText = "APAGAR";
         //     $pResposta.appendChild($buttonDelete);
-
+    
         //     $buttonDelete.addEventListener('click', comentarioDelete);
         // }
     })
