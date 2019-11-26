@@ -5,20 +5,21 @@ function exibeCampanha(urlCampanha, dadosCampanha) {
     location.hash = "/" + urlCampanha;
     $viewer.innerHTML = '';
     
-    let $divCampanha = criaDiv(dadosCampanha);
+    let $divCampanha = criaDivCampanha(dadosCampanha);
     let $buttonDoadores = criaBotaoDoadores($divCampanha, dadosCampanha);
     let $buttonDoar = criaBotaoDoar($divCampanha, dadosCampanha);
     let $buttonLike = criaBotaoLike($divCampanha, dadosCampanha);
 
-    let $divCriaComentario = criaDivCriarComentario(dadosCampanha);
-    let $inputComentar = criaEspacoComentario($divCriaComentario, dadosCampanha);
-    let $buttonComentar = criaBotaoComentar($divCriaComentario, dadosCampanha);
+    let $divComentar = criaDivComentar(dadosCampanha);
+    let $inputComentar = criaEspacoComentario($divComentar, dadosCampanha);
+    let $buttonComentar = criaBotaoComentar($divComentar, dadosCampanha);
 
     let $divComentarios = criaDivComentarios(dadosCampanha);
 
 }
 
-function criaDiv(dadosCampanha) {
+/* Div Campanha */
+function criaDivCampanha(dadosCampanha) {
     $divCampanha = document.createElement("div");
     $viewer.appendChild($divCampanha);
     $divCampanha.id = "divCampanha";
@@ -95,29 +96,32 @@ function setLike() {
     like();
 }
 
-function criaDivCriarComentario(dadosCampanha) {
-    $divCriaComentario = document.createElement("div");
-    $viewer.appendChild($divCriaComentario);
-    $divCriaComentario.id = "divCriaComentario";
-    return $divCriaComentario;
+/* Div Comentar */
+function criaDivComentar(dadosCampanha) {
+    $divComentar = document.createElement("div");
+    $viewer.appendChild($divComentar);
+    $divComentar.id = "divComentar";
+    return $divComentar;
 }
-function criaBotaoComentar($divCriaComentario, dadosDono) {
-    $divCriaComentario.appendChild(document.createElement("br"));
+function criaBotaoComentar($divComentar, dadosDono) {
+    $divComentar.appendChild(document.createElement("br"));
     $buttonComentar = document.createElement("button");
-    $divCriaComentario.appendChild($buttonComentar);
+    $divComentar.appendChild($buttonComentar);
     $buttonComentar.id = "buttonComentario";
     $buttonComentar.innerText = "ENVIAR COMENTARIO";
     $buttonComentar.addEventListener('click', function () { comentar(); });
     return $buttonComentar;
 }
-function criaEspacoComentario($divCriaComentario) {
+function criaEspacoComentario($divComentar) {
     $input = document.createElement("input");
-    $divCriaComentario.appendChild($input);
+    $divComentar.appendChild($input);
     $input.id = "inputComentario";
     $input.placeholder = "Escreva seu comentário aqui";
     return $input;
 }
 
+
+/* Div Comentarios */
 function criaDivComentarios(dadosCampanha) {
     $divComentarios = document.createElement("div");
     $viewer.appendChild($divComentarios);
@@ -130,7 +134,7 @@ function insereListaComentarios($divComentarios, dadosCampanha) {
             $divComentarios.appendChild(document.createElement("hr"));
 
             /* Paragrafo Comentario */
-            let $pInfoComentario = criaInfoComentario($divComentarios, dadosComentario);
+            let $pInfoComentario = exibeInfoComentario($divComentarios, dadosComentario);
 
             /* Criar Resposta referenciada ao Comentario */
             let $inputCriaResposta = criaEspacoResposta($divComentarios);
@@ -144,7 +148,8 @@ function insereListaComentarios($divComentarios, dadosCampanha) {
     }
     return $divComentarios;
 }
-function criaInfoComentario($divComentarios, dadosComentario) {
+
+function exibeInfoComentario($divComentarios, dadosComentario) {
     let $pInfoComentario = document.createElement("p");
     $divComentarios.appendChild($pInfoComentario);
     $pInfoComentario.id = "comentario" + dadosComentario.idComent;
