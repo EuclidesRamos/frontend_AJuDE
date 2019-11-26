@@ -33,5 +33,4 @@ function salvaUrlCampanha(dados) {
     dados.forEach(element => {
         roteamentoCampanha.push("#/" + element.url);
     });
-    console.log("salvo");
 }
