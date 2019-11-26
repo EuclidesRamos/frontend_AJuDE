@@ -144,8 +144,8 @@ function getCampanha(urlCampanha) {
                 return response.json();
             }
         })
-        .then(dados => {
-            exibeCampanha(urlCampanha, dados);
+        .then(dadosCampanha => {
+            exibeCampanha(urlCampanha, dadosCampanha);
         })
         .catch(error => {
             alert(error);
@@ -186,7 +186,6 @@ function comentar() {
     let textoComentario = document.querySelector("#inputComentario").value;
     let urlCampanha = location.hash.substring(2);
 
-    console.log(urlCampanha);
     if (!!sessionStorage.getItem(idToken)) {
         fetch(URL + "/campanha/" + urlCampanha + "/comentario", 
         {
@@ -212,12 +211,41 @@ function comentar() {
     }
 }
 
-function comentarioDelete() {
-    // A fazer
+function comentarioDelete(donoComentario, idComent) {
+    let urlCampanha = location.hash.substring(2);
+
+    if (!!sessionStorage.getItem(idToken)) {
+        if (donoComentario.email === sessionStorage.getItem("email")) {
+            fetch(URL + "/campanha/" + urlCampanha + "/apagarComentario/"  + idComent,
+        {
+            'method':'POST',
+            'body': {},
+            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => {
+            if (!response.ok) {
+                tokenExpirado(response);
+                throw new Error("Não foi possível Apagar o Comentario. Por favor, tente novamente.");
+            } else {
+                return response.json();
+            }
+        })
+        .then(dados => {
+            alert("Comentário apagado com sucesso!");
+            getCampanha(urlCampanha);
+        })
+        .catch(error => {
+            alert(error);
+        });
+        }
+        else {
+            throw new Error("Você não tem permissão para Apagar esse Comentário.");
+        }
+    }
 }
 
 function responder(idComent) {
-    let textoResposta = document.querySelector("#inputResposta").value;
+    let textoResposta = document.querySelector("#inputResposta" + idComent).value;
     let urlCampanha = location.hash.substring(2);
 
     if (!!sessionStorage.getItem(idToken)) {
@@ -242,6 +270,39 @@ function responder(idComent) {
         .catch(error => {
             alert(error);
         })
+    }
+}
+
+function respostaDelete(idComent, donoResposta, idResposta) {
+    let urlCampanha = location.hash.substring(2);
+    
+    if (!!sessionStorage.getItem(idToken)) {
+        if (donoResposta.email === sessionStorage.getItem("email")) {
+            fetch(URL + "/campanha/" + urlCampanha + "/comentario/"  + idComent + "/apagarResposta/" + idResposta,
+        {
+            'method':'POST',
+            'body': {},
+            'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
+        })
+        .then(response => {
+            if (!response.ok) {
+                tokenExpirado(response);
+                throw new Error("Não foi possível Apagar a Resposta. Por favor, tente novamente.");
+            } else {
+                return response.json();
+            }
+        })
+        .then(dados => {
+            alert("Resposta apagada com sucesso!");
+            getCampanha(urlCampanha);
+        })
+        .catch(error => {
+            alert(error);
+        });
+        }
+        else {
+            throw new Error("Você não tem permissão para Apagar essa Resposta.");
+        }
     }
 }
 

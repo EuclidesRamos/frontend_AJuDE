@@ -1,18 +1,17 @@
 
 
 function exibeCampanha(urlCampanha, dadosCampanha) {
-    console.log("Fetch na Campanha.");
     location.hash = "/" + urlCampanha;
     $viewer.innerHTML = '';
     
     let $divCampanha = criaDivCampanha(dadosCampanha);
     let $buttonDoadores = criaBotaoDoadores($divCampanha, dadosCampanha);
     let $buttonDoar = criaBotaoDoar($divCampanha, dadosCampanha);
-    let $buttonLike = criaBotaoLike($divCampanha, dadosCampanha);
+    let $buttonLike = criaBotaoLike($divCampanha);
 
-    let $divComentar = criaDivComentar(dadosCampanha);
-    let $inputComentar = criaEspacoComentario($divComentar, dadosCampanha);
-    let $buttonComentar = criaBotaoComentar($divComentar, dadosCampanha);
+    let $divComentar = criaDivComentar();
+    let $inputComentario = criaInputComentar($divComentar);
+    let $buttonComentar = criaBotaoComentar($divComentar);
 
     let $divComentarios = criaDivComentarios(dadosCampanha);
 
@@ -23,8 +22,6 @@ function criaDivCampanha(dadosCampanha) {
     $divCampanha = document.createElement("div");
     $viewer.appendChild($divCampanha);
     $divCampanha.id = "divCampanha";
-
-    console.log(dadosCampanha); //remover depois
     
     $divCampanha.innerText = "Campanha: " + dadosCampanha.nomeCurto + "\n\n" +
     "Descrição: " + dadosCampanha.descricao + "\n\n" +
@@ -45,7 +42,7 @@ function criaBotaoDoadores($divCampanha, dadosCampanha) {
     $buttonDoadores.addEventListener('click', function () { exibeDoadores(dadosCampanha.nomeCurto, dadosCampanha.doadores) });
     return $buttonDoadores;
 }
-/* Desenvolver essa Página */
+/* Criar Botão para voltar a campanha, removendo hash e fazendo Fetch novamente*/
 function exibeDoadores(nomeCurtoCampanha, doadores) {
     location.hash += "/doadores";
     $viewer.innerHTML = `<h1>Doadores da campanha - ${nomeCurtoCampanha} -</h1>`;
@@ -84,7 +81,7 @@ function adicionaDoacao(nomeCurtoCampanha) {
     $sendDoacao.addEventListener('click', doar);
 }
 
-function criaBotaoLike($divCampanha, dadosCampanha) {
+function criaBotaoLike($divCampanha) {
     $buttonLike = document.createElement("button");
     $divCampanha.appendChild($buttonLike);
     $buttonLike.id = "buttonLike";
@@ -97,13 +94,20 @@ function setLike() {
 }
 
 /* Div Comentar */
-function criaDivComentar(dadosCampanha) {
+function criaDivComentar() {
     $divComentar = document.createElement("div");
     $viewer.appendChild($divComentar);
     $divComentar.id = "divComentar";
     return $divComentar;
 }
-function criaBotaoComentar($divComentar, dadosDono) {
+function criaInputComentar($divComentar) {
+    $inputComentario = document.createElement("input");
+    $divComentar.appendChild($inputComentario);
+    $inputComentario.id = "inputComentario";
+    $inputComentario.placeholder = "Escreva seu comentário aqui";
+    return $inputComentario;
+}
+function criaBotaoComentar($divComentar) {
     $divComentar.appendChild(document.createElement("br"));
     $buttonComentar = document.createElement("button");
     $divComentar.appendChild($buttonComentar);
@@ -111,13 +115,6 @@ function criaBotaoComentar($divComentar, dadosDono) {
     $buttonComentar.innerText = "ENVIAR COMENTARIO";
     $buttonComentar.addEventListener('click', function () { comentar(); });
     return $buttonComentar;
-}
-function criaEspacoComentario($divComentar) {
-    $input = document.createElement("input");
-    $divComentar.appendChild($input);
-    $input.id = "inputComentario";
-    $input.placeholder = "Escreva seu comentário aqui";
-    return $input;
 }
 
 
@@ -131,26 +128,26 @@ function criaDivComentarios(dadosCampanha) {
 function insereListaComentarios($divComentarios, dadosCampanha) {
     if (dadosCampanha.comentarios.length !== 0) {
         dadosCampanha.comentarios.forEach(dadosComentario => {
-            $divComentarios.appendChild(document.createElement("hr"));
+            if (!dadosComentario.apagado) { 
+                $divComentarios.appendChild(document.createElement("hr"));     
 
-            /* Paragrafo Comentario */
-            let $pInfoComentario = exibeInfoComentario($divComentarios, dadosComentario);
+                /* Paragrafo Comentario */
+                let $pInfoComentario = exibeInfoComentario($divComentarios, dadosComentario);
 
-            /* Criar Resposta referenciada ao Comentario */
-            let $inputCriaResposta = criaEspacoResposta($divComentarios);
-            let $buttonEnviaResposta = criaBotaoResponder($divComentarios, dadosComentario);
+                /* Criar Resposta referenciada ao Comentario */
+                let $inputCriaResposta = criaEspacoResposta($divComentarios, dadosComentario);
+                let $buttonEnviaResposta = criaBotaoResponder($divComentarios, dadosComentario);
 
-            /* Inicialmente não exibe respostas */
-            let $divRespostas = criaDivRespostas($divComentarios, dadosComentario);
-            
+                /* Inicialmente não exibe respostas */
+                let $divRespostas = criaDivListaRespostas($divComentarios, dadosComentario);
+            }
         });
-        $divComentarios.appendChild(document.createElement("hr"));
     }
     return $divComentarios;
 }
 
 function exibeInfoComentario($divComentarios, dadosComentario) {
-    let $pInfoComentario = document.createElement("p");
+    $pInfoComentario = document.createElement("p");
     $divComentarios.appendChild($pInfoComentario);
     $pInfoComentario.id = "comentario" + dadosComentario.idComent;
     $pInfoComentario.innerText = dadosComentario.donoComentario.primeiroNome + " " 
@@ -160,21 +157,20 @@ function exibeInfoComentario($divComentarios, dadosComentario) {
 }
 function permissaoDeletarComentario($pInfoComentario, dadosComentario) {
     if (dadosComentario.donoComentario.email === sessionStorage.getItem("email")) {
-        let $buttonDelete = document.createElement("button");
-        $pInfoComentario.appendChild($buttonDelete);
-        $buttonDelete.id = "buttonDelete";
-        $buttonDelete.innerText = "APAGAR COMENTARIO";
-        /* Desenvolver Fetch deleteComentario */
-        $buttonDelete.addEventListener('click', comentarioDelete);
+        $buttonDeleteComentario = document.createElement("button");
+        $pInfoComentario.appendChild($buttonDeleteComentario);
+        $buttonDeleteComentario.id = "buttonDeleteComentario";
+        $buttonDeleteComentario.innerText = "APAGAR COMENTARIO";
+        $buttonDeleteComentario.addEventListener('click', function () { comentarioDelete(dadosComentario.donoComentario, dadosComentario.idComent) });
     }
     return $pInfoComentario;
 }
 
-function criaEspacoResposta($divComentarios) {
+function criaEspacoResposta($divComentarios, dadosComentario) {
     $divComentarios.appendChild(document.createElement("br"));
     $inputResposta = document.createElement("input");
     $divComentarios.appendChild($inputResposta);
-    $inputResposta.id = "inputResposta";
+    $inputResposta.id = "inputResposta" + dadosComentario.idComent;
     $inputResposta.placeholder = "Escreva sua resposta aqui";
     return $inputResposta;
 }
@@ -188,30 +184,58 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
     return $buttonResponder;
 }
 
-function criaDivRespostas($divComentarios, dadosComentario) {
-    let $divRespostas = document.createElement("div");
-    $divComentarios.appendChild($divRespostas);
-    $divRespostas.id = "divListaComentarios";
+    /* Div Respostas */
+    function criaDivListaRespostas($divComentarios, dadosComentario) {
+        let $divListaRespostas = document.createElement("div");
+        $divComentarios.appendChild($divListaRespostas);
+        $divListaRespostas.id = "divListaComentarios";
 
-    let $buttonExibirResposta = criaBotaoExibirResposta($divRespostas, dadosComentario);
+        let $buttonExibirResposta = criaBotaoExibirResposta($divListaRespostas, dadosComentario);
+        
+        return $divListaRespostas;
+    } 
+    function criaBotaoExibirResposta($divListaRespostas, dadosComentario) {
+        $buttonExibirResposta = document.createElement("button");
+        $divListaRespostas.appendChild($buttonExibirResposta);
+        $buttonExibirResposta.id = "buttonExibirResposta" + dadosComentario.idComent;
+        $buttonExibirResposta.innerText = "Exibir Respostas";
+        $buttonExibirResposta.addEventListener('click', function () { insereListaRespostas(dadosComentario, $divListaRespostas, dadosComentario.respostas); })
+        return $buttonExibirResposta;
+    }
+    function insereListaRespostas(dadosComentario, $divListaRespostas, respostas) {
+        let existeNaoApagada = false;
+        respostas.forEach(dadosResposta => {
+            if (!dadosResposta.apagada) {
+                existeNaoApagada = true;
+                $divListaRespostas.appendChild(document.createElement("hr"));
+                
+                let $divResposta = exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta);
+                
+            }
+        })
+        if (existeNaoApagada) {
+            document.querySelector("#buttonExibirResposta" + dadosComentario.idComent)
+            .style.display = 'none';
+        }
+    }
+    function exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta) {
+        $divResposta = document.createElement("div");
+        $divListaRespostas.appendChild($divResposta);
+        $divResposta.id = "divResposta" + dadosResposta.idResposta;
     
-    return $divRespostas;
-} 
-function criaBotaoExibirResposta($divRespostas, dadosComentario) {
-    $buttonExibirResposta = document.createElement("button");
-    $divRespostas.appendChild($buttonExibirResposta);
-    $buttonExibirResposta.id = "buttonResposta" + dadosComentario.idComent;
-    $buttonExibirResposta.innerText = "Exibir Respostas";
-    $buttonExibirResposta.addEventListener('click', function () { insereListaRespostas($divRespostas, dadosComentario.respostas); })
-    return $buttonExibirResposta;
-}
-function insereListaRespostas($divRespostas, respostas) {
-    respostas.forEach(resposta => {
-        let $pResposta = document.createElement("p");
-        $divRespostas.appendChild($pResposta);
-        $pResposta.id = "pResposta";
+        $divResposta.innerText = dadosResposta.donoResposta.primeiroNome + " " + dadosResposta.donoResposta.ultimoNome +
+                            ":\n" + dadosResposta.textoResposta + "\n";
+        
+        return permissaoDeletarResposta(dadosComentario, $divResposta, dadosResposta);
+    }
+    function permissaoDeletarResposta(dadosComentario, $divResposta, dadosResposta) {
+        if (dadosResposta.donoResposta.email === sessionStorage.getItem("email")) {
+            let $buttonDeleteResposta = document.createElement("button");
+            $divResposta.appendChild($buttonDeleteResposta);
+            $buttonDeleteResposta.id = "buttonDeleteResposta";
+            $buttonDeleteResposta.innerText = "APAGAR RESPOSTA";
+            $buttonDeleteResposta.addEventListener('click', function () { respostaDelete(dadosComentario.idComent, dadosResposta.donoResposta, dadosResposta.idResposta) });
+        }
+        return $divResposta;
+    }
     
-        $pResposta.innerText = resposta.donoResposta.primeiroNome + resposta.donoResposta.ultimoNome +
-                             ":\n" + resposta.textoResposta + "\n";   
-    })
-}
