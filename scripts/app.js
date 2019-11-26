@@ -182,7 +182,7 @@ function like() {
     }
 }
 
-function comentario() {
+function comentar() {
     let textoComentario = document.querySelector("#inputComentario").value;
     let urlCampanha = location.hash.substring(2);
 
@@ -216,7 +216,7 @@ function comentarioDelete() {
     // A fazer
 }
 
-function resposta(idComent) {
+function responder(idComent) {
     let textoResposta = document.querySelector("#inputResposta").value;
     let urlCampanha = location.hash.substring(2);
 
