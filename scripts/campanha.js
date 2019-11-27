@@ -1,19 +1,24 @@
-
-
 function exibeCampanha(urlCampanha, dadosCampanha) {
     location.hash = "/" + urlCampanha;
     $viewer.innerHTML = '';
     
+    $container = document.createElement("div");
+    $container.classList.add("container");
+    $viewer.appendChild($container);
+
     let $divCampanha = criaDivCampanha(dadosCampanha);
+    $container.appendChild($divCampanha);
     criaBotaoDoadores($divCampanha, dadosCampanha);
     criaBotaoDoar($divCampanha, dadosCampanha);
     criaBotaoLike($divCampanha);
 
     let $divComentar = criaDivComentar();
+    $divCampanha.appendChild($divComentar);
+
     criaInputComentar($divComentar);
     criaBotaoComentar($divComentar);
 
-    criaDivComentarios(dadosCampanha);
+    criaDivComentarios(dadosCampanha, $divCampanha);
 
 }
 
@@ -56,7 +61,7 @@ function exibeDoadores(nomeCurtoCampanha, doadores) {
         $usuarioReferenciado.innerText = doador.primeiroNome + " " + doador.ultimoNome;
         $usuarioReferenciado.href = "#/user/" + doador.urlUser;
 
-        $usuarioReferenciado.addEventListener('click', () => getUsuario(doador));
+        $usuarioReferenciado.addEventListener('click', () => getUsuario(doador.urlUser));
     })
 }
 
@@ -118,9 +123,9 @@ function criaBotaoComentar($divComentar) {
 }
 
 /* Div Comentarios */
-function criaDivComentarios(dadosCampanha) {
+function criaDivComentarios(dadosCampanha, $divCampanha) {
     $divComentarios = document.createElement("div");
-    $viewer.appendChild($divComentarios);
+    $divCampanha.appendChild($divComentarios);
     $divComentarios.id = "divComentarios";
     return insereListaComentarios($divComentarios, dadosCampanha);;
 }
@@ -138,7 +143,7 @@ function insereListaComentarios($divComentarios, dadosCampanha) {
                 criaBotaoResponder($divComentarios, dadosComentario);
 
                 /* Inicialmente não exibe respostas */
-                criaDivListaRespostas($divComentarios, dadosComentario);
+                criaDivListaRespostas("comentario" + dadosComentario.idComent, dadosComentario);
             }
         });
     }
@@ -146,7 +151,7 @@ function insereListaComentarios($divComentarios, dadosCampanha) {
 }
 
 function exibeInfoComentario($divComentarios, dadosComentario) {
-    $pInfoComentario = document.createElement("p");
+    $pInfoComentario = document.createElement("div");
     $divComentarios.appendChild($pInfoComentario);
     $pInfoComentario.id = "comentario" + dadosComentario.idComent;
     $pInfoComentario.innerText = dadosComentario.donoComentario.primeiroNome + " " 
@@ -184,10 +189,10 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
 }
 
     /* Div Respostas */
-    function criaDivListaRespostas($divComentarios, dadosComentario) {
+    function criaDivListaRespostas(idComentario, dadosComentario) {
         let $divListaRespostas = document.createElement("div");
-        $divComentarios.appendChild($divListaRespostas);
-        $divListaRespostas.id = "divListaComentarios";
+        document.querySelector(`#${idComentario}`).appendChild($divListaRespostas);
+        $divListaRespostas.id = "divRespostas";
 
         criaBotaoExibirResposta($divListaRespostas, dadosComentario);
         
@@ -197,6 +202,7 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
         $buttonExibirResposta = document.createElement("button");
         $divListaRespostas.appendChild($buttonExibirResposta);
         $buttonExibirResposta.id = "buttonExibirResposta" + dadosComentario.idComent;
+        $buttonExibirResposta.classList.add("exibirResposta");
         $buttonExibirResposta.innerText = "Exibir Respostas";
         $buttonExibirResposta.addEventListener('click', function () { insereListaRespostas(dadosComentario, $divListaRespostas, dadosComentario.respostas); })
         return $buttonExibirResposta;
@@ -206,21 +212,20 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
         respostas.forEach(dadosResposta => {
             if (!dadosResposta.apagada) {
                 existeNaoApagada = true;
-                $divListaRespostas.appendChild(document.createElement("hr"));
                 
                 exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta);
                 
             }
         })
         if (existeNaoApagada) {
-            document.querySelector("#buttonExibirResposta" + dadosComentario.idComent)
-            .style.display = 'none';
+            document.querySelector("#buttonExibirResposta" + dadosComentario.idComent).style.display = 'none';
         }
     }
     function exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta) {
         $divResposta = document.createElement("div");
         $divListaRespostas.appendChild($divResposta);
         $divResposta.id = "divResposta" + dadosResposta.idResposta;
+        $divResposta.classList.add("resposta");
     
         $divResposta.innerText = dadosResposta.donoResposta.primeiroNome + " " + dadosResposta.donoResposta.ultimoNome +
                             ":\n" + dadosResposta.textoResposta + "\n";

@@ -56,8 +56,9 @@ function hall() {
     ajustaBotoesHeader('inline', 'none');
 }
 
-function ajustaBotoesHeader(desconectarBotao, botaoHome) {
-    document.getElementById("desconectar").style.display = desconectarBotao;
+function ajustaBotoesHeader(botaoHall, botaoHome) {
+    document.getElementById("desconectar").style.display = botaoHall;
+    document.getElementById("home").style.display = botaoHall;
     document.getElementById("singUp").style.display = botaoHome;
     document.getElementById("singIn").style.display = botaoHome;
 

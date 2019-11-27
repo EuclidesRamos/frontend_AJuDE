@@ -175,7 +175,7 @@ form {
     margin: 5px;
 }
 
-#buttonLike, #buttonSend, #buttonComentario, #sendResposta, #buttonDoar, #buttonDoadores {
+#buttonLike, #buttonSend, #buttonComentario, #sendResposta, #buttonDoar, #buttonDoadores, .exibirResposta {
     color: #305561;
     background: white;
     width: 200px;
@@ -234,8 +234,9 @@ form {
     text-align: center;
 }
 
-#divCampanha {
+#divCampanha, #divUsuario {
     background-color: #6c9599;
+    width: 1000px;
     color:white;
     text-align: center;
     margin: 20px;
@@ -264,7 +265,7 @@ form {
     border-radius: 10px;
 }
 
-#buttonDelete {
+#buttonDelete, #buttonDeleteComentario {
     color: #b61a05;
     background: white;
     width: 200px;
@@ -285,13 +286,33 @@ form {
     color: #b61a05;
     background: white;
     width: 100px;
-    height: 15px;
+    height: 40px;
     border-radius: 10px;
-    object-position: right;
-    border: none;
+    border-color: #305561;
+    border-style: solid;
+    border-width: 1px;
     outline: none;
     margin: 5px;
-    right: 1px;
-    top: 2px;
+    bottom: 35px;
+    display: flex;
     position: relative;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+} 
+
+.resposta {
+    background-color: white;
+    color: #305561;
+    text-align: center;
+    margin: 10px;
+    height: 50px;
+    border-width: 1px;
+    border-color: #305561;
+    border-style: solid;
+    border-radius: 10px;
 }

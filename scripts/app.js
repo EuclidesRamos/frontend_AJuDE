@@ -345,33 +345,26 @@ function doar() {
     }
 }
 
-function getUsuario(usuario) {
+function getUsuario(urlUser) {
 
-    let urlUser = usuario.urlUser;
-
-    if(!!sessionStorage.getItem(idToken)) {
-        fetch(URL + "/usuarios/" + urlUser,
-            {
-                'method':'GET'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    tokenExpirado(response);
-                    throw new Error("Não foi possível visualizar esse Usuário. Por favor, tente novamente.");
-                } else {
-                    return response.json();
-                }
-            })
-            .then(dados => {
-                console.log("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
-                console.log(dados);
-                alert("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
-                exibeUsuario(dados);
-            })
-            .catch(error => {
-                alert(error);
-            })
-    };
+    fetch(URL + "/usuarios/" + urlUser,
+        {
+            'method':'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Não foi possível visualizar esse Usuário. Por favor, tente novamente.");
+            } else {
+                return response.json();
+            }
+        })
+        .then(dadosUser => {
+            console.log(dadosUser);
+            exibeUsuario(dadosUser);
+        })
+        .catch(error => {
+            alert(error);
+        })
 
 }
 
@@ -456,10 +449,8 @@ function roteamento() {
     } else if (roteamentoCampanha.includes(hash)) {
         getCampanha(hash.substring(2));
     } else if (roteamentoUser.includes(hash)) {
-        console.log("errado");
-        // a fazer
+        getUsuario(hash.substring(2));
     } else if (["busca"].includes(hash.split("/")[1])) {
-        console.log("errado");
         pesquisaCampanha(hash.split("/")[2]);
     }
 }

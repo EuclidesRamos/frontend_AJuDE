@@ -1,43 +1,59 @@
-
 function exibeUsuario(dadosPaginaUsuario) {
     location.hash = "/" + dadosPaginaUsuario.urlUser;
     $viewer.innerHTML = '';
     
-    criaDivUsuario(dadosPaginaUsuario);
+    $divUsuario = criaDivUsuario(dadosPaginaUsuario);
 
-    listaCampanhasCriadas(dadosPaginaUsuario);
-    listaDoacoesFeitas(dadosPaginaUsuario);
+    listaCampanhasCriadas(dadosPaginaUsuario, $divUsuario);
+    $viewer.appendChild(document.createElement("hr"));
+    listaDoacoesFeitas(dadosPaginaUsuario, $divUsuario);
 
 }
 
 function criaDivUsuario(dadosPaginaUsuario) {
     $divUsuario = document.createElement("div");
-    $viewer.appendChild($divUsuario);
-    $divUsuario.id = "divCampanha";
+
+    $container = document.createElement("div");
+    $container.classList.add("container");
+    $container.appendChild($divUsuario);
+
+    $viewer.appendChild($container);
+    $divUsuario.id = "divUsuario";
     
-    $divUsuario.innerText = "Usuário: " + dadosPaginaUsuario.primeiroNome + dadosPaginaUsuario.ultimoNome + "\n\n" +
-    "Email: " + dadosPaginaUsuario.email + "\n\n";
+    $h1 = document.createElement("h1");
+    $h1.id = "usuarioNome";
+    $divUsuario.appendChild($h1);
+    $divUsuario.appendChild(document.createElement("hr"));
+    $h1.innerText = dadosPaginaUsuario.primeiroNome + " " + dadosPaginaUsuario.ultimoNome;
+    
+    $pEmail = document.createElement("p");
+    $pEmail.innerText = "Email: " + dadosPaginaUsuario.email + "\n\n";
+    return $divUsuario;
 }
 
-function listaCampanhasCriadas(dadosPaginaUsuario) {
+function listaCampanhasCriadas(dadosPaginaUsuario, $divUsuario) {
     $divListaCampanhas = document.createElement("div");
-    $viewer.appendChild($divListaCampanhas);
+    $divUsuario.appendChild($divListaCampanhas);
     $divListaCampanhas.id = "divListaCampanhas";
 
-    /* Colocar como título, aqui: Campanhas Criadas */
+    $pTitulo = document.createElement("p");
+    $divListaCampanhas.appendChild($pTitulo);
+    $pTitulo.classList.add("tituloUser");
+
+    $pTitulo.innerText = "Campanhas criadas: \n";
 
     if (dadosPaginaUsuario.campanhasCriadas.length !== 0) {
         dadosPaginaUsuario.campanhasCriadas.forEach(dadosCampanha => {
             $divCampanha = document.createElement("div");
             $divListaCampanhas.appendChild($divCampanha);
+            $divCampanha.classList.add("campanhaPerfil");
 
             $linkCampanha = document.createElement("a");
             $divCampanha.appendChild($linkCampanha);
 
             $linkCampanha.id = "campanha" + dadosCampanha.url;
 
-            $linkCampanha.innerText = dadosCampanha.nomeCurto + " " + dadosCampanha.status + " " +
-            dadosCampanha.doacoes + "/" + dadosCampanha.meta;
+            $linkCampanha.innerText = dadosCampanha.nomeCurto + " " + dadosCampanha.status + " " + dadosCampanha.doacoes + "/" + dadosCampanha.meta;
             $linkCampanha.href = "#/" + dadosCampanha.url;
 
             $linkCampanha.addEventListener('click', () => getCampanha(dadosCampanha.url));
@@ -46,12 +62,16 @@ function listaCampanhasCriadas(dadosPaginaUsuario) {
     }
 }
 
-function listaDoacoesFeitas(dadosPaginaUsuario) {
+function listaDoacoesFeitas(dadosPaginaUsuario, $divUsuario) {
     $divListaDoacoesFeitas = document.createElement("div");
-    $viewer.appendChild($divListaDoacoesFeitas);
+    $divUsuario.appendChild($divListaDoacoesFeitas);
     $divListaDoacoesFeitas.id = "divListaDoacoesFeitas";
 
-    /* Colocar como título, aqui: Doações Realizadas */
+    $pTitulo = document.createElement("p");
+    $divListaCampanhas.appendChild($pTitulo);
+    $pTitulo.classList.add("tituloUser");
+
+    $pTitulo.innerText = "Doações Feitas: \n";
 
     if (dadosPaginaUsuario.doacoesRealizadas.length !== 0) {
         dadosPaginaUsuario.doacoesRealizadas.forEach(dadosDoacao => {
@@ -60,6 +80,7 @@ function listaDoacoesFeitas(dadosPaginaUsuario) {
             
             $divCampanha = document.createElement("div");
             $divListaDoacoesFeitas.appendChild($divCampanha);
+            $divCampanha.classList.add("campanhaPerfil");
 
             $linkCampanha = document.createElement("a");
             $divCampanha.appendChild($linkCampanha);
