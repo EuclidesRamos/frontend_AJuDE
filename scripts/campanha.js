@@ -5,15 +5,15 @@ function exibeCampanha(urlCampanha, dadosCampanha) {
     $viewer.innerHTML = '';
     
     let $divCampanha = criaDivCampanha(dadosCampanha);
-    let $buttonDoadores = criaBotaoDoadores($divCampanha, dadosCampanha);
-    let $buttonDoar = criaBotaoDoar($divCampanha, dadosCampanha);
-    let $buttonLike = criaBotaoLike($divCampanha);
+    criaBotaoDoadores($divCampanha, dadosCampanha);
+    criaBotaoDoar($divCampanha, dadosCampanha);
+    criaBotaoLike($divCampanha);
 
     let $divComentar = criaDivComentar();
-    let $inputComentario = criaInputComentar($divComentar);
-    let $buttonComentar = criaBotaoComentar($divComentar);
+    criaInputComentar($divComentar);
+    criaBotaoComentar($divComentar);
 
-    let $divComentarios = criaDivComentarios(dadosCampanha);
+    criaDivComentarios(dadosCampanha);
 
 }
 
@@ -39,24 +39,24 @@ function criaBotaoDoadores($divCampanha, dadosCampanha) {
     $divCampanha.appendChild($buttonDoadores);
     $buttonDoadores.id = "buttonDoadores";
     $buttonDoadores.innerText = "DOADORES";
-    $buttonDoadores.addEventListener('click', function () { exibeDoadores(dadosCampanha.nomeCurto, dadosCampanha.doadores) });
+    $buttonDoadores.addEventListener('click', () => exibeDoadores(dadosCampanha.nomeCurto, dadosCampanha.doadores));
     return $buttonDoadores;
 }
-/* Criar Botão para voltar a campanha, removendo hash e fazendo Fetch novamente*/
 function exibeDoadores(nomeCurtoCampanha, doadores) {
     location.hash += "/doadores";
     $viewer.innerHTML = `<h1>Doadores da campanha - ${nomeCurtoCampanha} -</h1>`;
 
-    doadores.forEach(element => {
-        $p = document.createElement("p");
-        $p.id = "nomeDoador";
-        $viewer.appendChild($p);
+    doadores.forEach(doador => {
+        $usuarioReferenciado = document.createElement("a");
+        
+        $usuarioReferenciado.id = "nomeDoador" + doador.urlUser;
+        $viewer.appendChild($usuarioReferenciado);
+        $viewer.appendChild(document.createElement("br"));
 
-        $p.innerText = element.primeiroNome + element.ultimoNome;
-        $p.href = element.urlUser;
+        $usuarioReferenciado.innerText = doador.primeiroNome + " " + doador.ultimoNome;
+        $usuarioReferenciado.href = "#/user/" + doador.urlUser;
 
-        /* Criar o getDoador() - function getUsuario() talvez seja melhor */
-        $p.addEventListener('click', function () { getDoador(element.urlUser) });
+        $usuarioReferenciado.addEventListener('click', () => getUsuario(doador));
     })
 }
 
@@ -65,7 +65,7 @@ function criaBotaoDoar($divCampanha, dadosCampanha) {
     $divCampanha.appendChild($buttonDoar);
     $buttonDoar.id = "buttonDoar";
     $buttonDoar.innerText = "DOAR";
-    $buttonDoar.addEventListener('click', function () { adicionaDoacao(dadosCampanha.nomeCurto) });
+    $buttonDoar.addEventListener('click', () => adicionaDoacao(dadosCampanha.nomeCurto));
     return $buttonDoar;
 }
 /* Desenvolver essa Página */
@@ -86,7 +86,7 @@ function criaBotaoLike($divCampanha) {
     $divCampanha.appendChild($buttonLike);
     $buttonLike.id = "buttonLike";
     $buttonLike.innerText = "CURTIR/DESCURTIR";
-    $buttonLike.addEventListener('click', function () { setLike(); });
+    $buttonLike.addEventListener('click', () => setLike());
     return $buttonLike;
 }
 function setLike() {
@@ -113,10 +113,9 @@ function criaBotaoComentar($divComentar) {
     $divComentar.appendChild($buttonComentar);
     $buttonComentar.id = "buttonComentario";
     $buttonComentar.innerText = "ENVIAR COMENTARIO";
-    $buttonComentar.addEventListener('click', function () { comentar(); });
+    $buttonComentar.addEventListener('click', () => comentar());
     return $buttonComentar;
 }
-
 
 /* Div Comentarios */
 function criaDivComentarios(dadosCampanha) {
@@ -132,14 +131,14 @@ function insereListaComentarios($divComentarios, dadosCampanha) {
                 $divComentarios.appendChild(document.createElement("hr"));     
 
                 /* Paragrafo Comentario */
-                let $pInfoComentario = exibeInfoComentario($divComentarios, dadosComentario);
+                exibeInfoComentario($divComentarios, dadosComentario);
 
                 /* Criar Resposta referenciada ao Comentario */
-                let $inputCriaResposta = criaEspacoResposta($divComentarios, dadosComentario);
-                let $buttonEnviaResposta = criaBotaoResponder($divComentarios, dadosComentario);
+                criaEspacoResposta($divComentarios, dadosComentario);
+                criaBotaoResponder($divComentarios, dadosComentario);
 
                 /* Inicialmente não exibe respostas */
-                let $divRespostas = criaDivListaRespostas($divComentarios, dadosComentario);
+                criaDivListaRespostas($divComentarios, dadosComentario);
             }
         });
     }
@@ -190,7 +189,7 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
         $divComentarios.appendChild($divListaRespostas);
         $divListaRespostas.id = "divListaComentarios";
 
-        let $buttonExibirResposta = criaBotaoExibirResposta($divListaRespostas, dadosComentario);
+        criaBotaoExibirResposta($divListaRespostas, dadosComentario);
         
         return $divListaRespostas;
     } 
@@ -209,7 +208,7 @@ function criaBotaoResponder($divComentarios, dadosComentario) {
                 existeNaoApagada = true;
                 $divListaRespostas.appendChild(document.createElement("hr"));
                 
-                let $divResposta = exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta);
+                exibeInfoResposta(dadosComentario, $divListaRespostas, dadosResposta);
                 
             }
         })

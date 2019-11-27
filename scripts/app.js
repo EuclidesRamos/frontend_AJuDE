@@ -309,7 +309,8 @@ function respostaDelete(idComent, donoResposta, idResposta) {
 function doar() {
     let valorDoacao = document.querySelector("#inputDoacao").value;
     let url = location.hash.substring(2);
-    
+    let urlCampanha = url.split("/")[0];
+
     let now = new Date();
     let date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
 
@@ -329,9 +330,13 @@ function doar() {
                     return response.json();
                 }
             })
-            .then(dados => {
-                console.log(dados);
-                alert("Doação realizada. Obrigado!");
+            .then(dadosCampanha => {
+                if (dadosCampanha.doacoes - valorDoacao < dadosCampanha.meta && dadosCampanha.doacoes > dadosCampanha.meta) {
+                    alert("Você foi o Usuário responsável por bater essa meta. Muuuito Obrigado!");
+                } else {
+                    alert("Doação realizada. Obrigado!");
+                }
+                getCampanha(urlCampanha);
             })
             .catch(error => {
                 alert(error);
@@ -339,6 +344,37 @@ function doar() {
         }
     }
 }
+
+function getUsuario(usuario) {
+
+    let urlUser = usuario.urlUser;
+
+    if(!!sessionStorage.getItem(idToken)) {
+        fetch(URL + "/usuarios/" + urlUser,
+            {
+                'method':'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    tokenExpirado(response);
+                    throw new Error("Não foi possível visualizar esse Usuário. Por favor, tente novamente.");
+                } else {
+                    return response.json();
+                }
+            })
+            .then(dados => {
+                console.log("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
+                console.log(dados);
+                alert("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
+                exibeUsuario(dados);
+            })
+            .catch(error => {
+                alert(error);
+            })
+    };
+
+}
+
 
 function exibeResultadoBusca(dados, stringBusca) {
 
