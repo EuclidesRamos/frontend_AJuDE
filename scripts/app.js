@@ -309,7 +309,9 @@ function respostaDelete(idComent, donoResposta, idResposta) {
 function doar() {
     let valorDoacao = document.querySelector("#inputDoacao").value;
     let url = location.hash.substring(2);
-    
+    let urlCampanha = url.split("/")[0];
+    console.log(urlCampanha);
+
     let now = new Date();
     let date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
 
@@ -330,8 +332,9 @@ function doar() {
                 }
             })
             .then(dados => {
-                console.log(dados);
                 alert("Doação realizada. Obrigado!");
+                console.log(dados);
+                getCampanha(urlCampanha);
             })
             .catch(error => {
                 alert(error);
@@ -339,6 +342,36 @@ function doar() {
         }
     }
 }
+
+function getUsuario(usuario) {
+
+    let urlUser = usuario.urlUser;
+
+    if(!!sessionStorage.getItem(idToken)) {
+        fetch(URL + "/usuarios/" + urlUser,
+            {
+                'method':'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    tokenExpirado(response);
+                    throw new Error("Não foi possível visualizar esse Usuário. Por favor, tente novamente.");
+                } else {
+                    return response.json();
+                }
+            })
+            .then(dados => {
+                console.log("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
+                alert("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
+                /* exibeUsuario(dados.ur) */
+            })
+            .catch(error => {
+                alert(error);
+            })
+    };
+
+}
+
 
 function exibeResultadoBusca(dados, stringBusca) {
 
