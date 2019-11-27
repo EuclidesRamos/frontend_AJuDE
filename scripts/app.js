@@ -310,7 +310,6 @@ function doar() {
     let valorDoacao = document.querySelector("#inputDoacao").value;
     let url = location.hash.substring(2);
     let urlCampanha = url.split("/")[0];
-    console.log(urlCampanha);
 
     let now = new Date();
     let date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate();
@@ -331,9 +330,12 @@ function doar() {
                     return response.json();
                 }
             })
-            .then(dados => {
-                alert("Doação realizada. Obrigado!");
-                console.log(dados);
+            .then(dadosCampanha => {
+                if (dadosCampanha.doacoes - valorDoacao < dadosCampanha.meta && dadosCampanha.doacoes > dadosCampanha.meta) {
+                    alert("Você foi o Usuário responsável por bater essa meta. Muuuito Obrigado!");
+                } else {
+                    alert("Doação realizada. Obrigado!");
+                }
                 getCampanha(urlCampanha);
             })
             .catch(error => {
