@@ -117,7 +117,6 @@ function criaBotaoComentar($divComentar) {
     return $buttonComentar;
 }
 
-
 /* Div Comentarios */
 function criaDivComentarios(dadosCampanha) {
     $divComentarios = document.createElement("div");

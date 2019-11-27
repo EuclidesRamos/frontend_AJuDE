@@ -362,8 +362,9 @@ function getUsuario(usuario) {
             })
             .then(dados => {
                 console.log("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
+                console.log(dados);
                 alert("Página de " + usuario.primeiroNome + " " + usuario.ultimoNome);
-                /* exibeUsuario(dados.ur) */
+                exibeUsuario(dados);
             })
             .catch(error => {
                 alert(error);
