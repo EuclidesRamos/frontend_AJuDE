@@ -8,7 +8,9 @@ O AJuDE é uma ferramenta que permite a organização de doações para projetos
 O AJuDE é uma plataforma para financiamento coletivo onde as causas mais populares ganham mais visibilidade. Cada projeto (ou campanha) será atendido quando conseguir arrecadar uma quantidade de doações igual ou superior à meta. O sistema permite que usuários classifiquem os projetos e escrevam comentários sobre os mesmos. Os usuários da aplicação criam projetos com suas metas. A partir desse momento o sistema começa a arrecadação e permite classificar, dar like/dislike nos projetos e ainda escrever comentários sobre eles.
 
 
-## Deploy atual [aqui](https://ajudefront.herokuapp.com/index.html).
+### Deploy atual [aqui](https://ajudefront.herokuapp.com/index.html).
+### Demo do projeto [aqui](https://www.youtube.com/playlist?list=PLYYkUGaZ2RV5bkE00bHfpStxr-AATli3Y).
+### Parte Backend [aqui](https://github.com/ManoMax/backend_AJuDE).
 
 
 ![AjudeProject](https://i.imgur.com/TR683cb.png)
@@ -43,7 +45,6 @@ O AJuDE é uma plataforma para financiamento coletivo onde as causas mais popula
 
 
 <br>Especificação sobre o projeto [aqui](https://docs.google.com/document/d/1h5WhnOhvyRmIbj_obhWK5XmoJgK35lVWPM2UwwMOT_Y/preview#).
-* [Parte Backend aqui](https://github.com/ManoMax/backend_AJuDE).
 * Orientação por: [@daltonserey](https://github.com/daltonserey), [@raquelvl](https://github.com/raquelvl) e [@juliafealves](https://github.com/juliafealves).
 
 
