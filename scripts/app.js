@@ -1,5 +1,4 @@
-// const URL = "https://ajudeproject.herokuapp.com/api/v1";
-const URL = "http://localhost:8080/api/v1";
+const URL = "https://ajudeproject.herokuapp.com/api/v1";
 let bufferTime = null;
 
 function cadastro() {
@@ -9,7 +8,7 @@ function cadastro() {
     let cartao = document.querySelector('#cartao').value;
     let senha = document.querySelector('#senha').value;
 
-    let urlUser = createURL(primeiroNome + " " + ultimoNome);
+    let urlUser = createURL(email);
 
     if (!validaEmail(email)) {
         alert("Email invalido. Por favor, certifique-se que informou corretamente e tente novamente.");
@@ -27,7 +26,7 @@ function cadastro() {
     .then(response => {
         if (response.ok) {
             return response.json();
-        } else if (false) {
+        } else if (!response.ok && response.status === 409) {
             throw new Error("Já existe um usuário com esse email associado. Por favor, tente com um email diferente.");
         } else {
             throw new Error("Cadastro não realizado. Certifique-se que colocou as informações corretamente e tente novamente."); 
@@ -391,8 +390,8 @@ function getCampanhas() {
 
 function exibeResultadoBusca(dados, stringBusca) {
     location.hash = "/busca/" + stringBusca;
+
     $viewer.innerHTML = '';
-    adicionaDivFiltro(dados, stringBusca);
     let $h1 = document.createElement("h1");
     $viewer.appendChild($h1);
     $h1.innerText = "Resultado da busca para - " + stringBusca + " -";
@@ -403,12 +402,7 @@ function exibeResultadoBusca(dados, stringBusca) {
     dados.forEach(element => {
         let $divElement = document.createElement("div");
         $divElement.classList.add("resultadoBusca");
-        if (document.querySelector("#checkbox").checked) {
-            if (element.status === "Ativa") {
-                $div.appendChild($divElement);
-            }
-            
-        } else {
+        if (element.status === "Ativa") {
             $div.appendChild($divElement);
         }
 
@@ -420,12 +414,6 @@ function exibeResultadoBusca(dados, stringBusca) {
         
         $divElement.addEventListener('click', function () { getCampanha(element.url); });
     });
-}
-
-function adicionaDivFiltro(dados, stringBusca) {
-    $divCheckbox = document.querySelector("#divCheckbox").style.display = "flex";
-    $input = document.querySelector("#checkbox");
-    $input.addEventListener('change', function() {exibeResultadoBusca(dados, stringBusca)});
 
 }
 

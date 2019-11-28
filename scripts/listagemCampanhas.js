@@ -1,19 +1,20 @@
 const $divTop5 = document.createElement("div");
+$divTop5.id = "divTop5";
 
 function exibeCampanhasTop5() {
     $porLike = document.createElement("option");
     $porQuantia = document.createElement("option");
     $porCronologia = document.createElement("option");
-
+    
     $a = document.createElement("a");
     $viewer.appendChild($a);
     $a.innerText = "Campanhas mais relevantes por";
     $a.classList.add("tituloRelevancia");
-
+    
     $select = document.createElement("select");
     $select.id = "estrategiaDeExibicao";
     $viewer.appendChild($select);
-
+    
     $imgSend = document.createElement("img");
     $imgSend.src = "/icons/eye.png";
     $imgSend.id = "enviarEstrategia";
@@ -22,6 +23,10 @@ function exibeCampanhasTop5() {
     $select.appendChild($porLike);
     $select.appendChild($porQuantia);
     $select.appendChild($porCronologia);
+    
+    $viewer.appendChild($divTop5);
+    $divTop5.classList.add("containertop5");
+    document.querySelector("#divTop5").innerHTML = '';
 
     $porLike.innerText = "Like";
     $porQuantia.innerText = "Quantia";
@@ -31,28 +36,25 @@ function exibeCampanhasTop5() {
     $porQuantia.value = "ByQuantia";
     $porCronologia.value = "ByData";
 
-    $viewer.appendChild($divTop5);
-    $divTop5.classList.add("containertop5");
+    $divTop5.innerHTML = '';
     getCampanhas();
-    console.log("ai1");
+
     $imgSend.addEventListener('click', function () {
         $divTop5.innerHTML = '';
-        getCampanhas();
+        getCampanhas();;
     })
 }
 
 function exibeCampanhasHome(dadosCampanhas) {
-    console.log("ai2");
+    $divTop5.innerHTML = '';
     if (dadosCampanhas.length !== 0) {
         dadosCampanhas.forEach((campanha, index) => {
             if (index < 5) {
-                console.log(campanha);
                 if (campanha.status === "Ativa") {
                     let $p = document.createElement("div");
                     $p.id = "campanha" + campanha.id;
                     $p.classList.add("campanhaTop5");
                     $divTop5.appendChild($p);
-                    console.log("ai2");
             
                     if ((campanha.meta - campanha.doacoes) > 0) {
                         $p.innerText = campanha.nomeCurto + "\n" + 
