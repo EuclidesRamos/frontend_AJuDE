@@ -28,6 +28,8 @@ O AJuDE é uma plataforma para financiamento coletivo onde as causas mais popula
       * **/scripts/viewes.js** - Arquivo armazenando as funções de redirecionamento, organizando quais informações serão exibidas na página inicial;
   * **/style** - Diretório contendo o arquivo css, responsável pela estilização da página;
       * **/style/estilo.css** - Arquivo contendo todas as proporções, cores e animações de todos os elementos do app.
+  * **index.php** - Arquivo necessário para deploy do front-end no heroku.
+  * **README.md** - Este aquivo que vos exibe.
 
 
 ## Tecnologias utilizadas
