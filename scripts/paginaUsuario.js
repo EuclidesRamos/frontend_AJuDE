@@ -5,7 +5,6 @@ function exibeUsuario(dadosPaginaUsuario) {
     $divUsuario = criaDivUsuario(dadosPaginaUsuario);
 
     listaCampanhasCriadas(dadosPaginaUsuario, $divUsuario);
-    $viewer.appendChild(document.createElement("hr"));
     listaDoacoesFeitas(dadosPaginaUsuario, $divUsuario);
 
 }
@@ -21,13 +20,17 @@ function criaDivUsuario(dadosPaginaUsuario) {
     $divUsuario.id = "divUsuario";
     
     $h1 = document.createElement("h1");
-    $h1.id = "usuarioNome";
     $divUsuario.appendChild($h1);
-    $divUsuario.appendChild(document.createElement("hr"));
+    $h1.id = "usuarioNome";
     $h1.innerText = dadosPaginaUsuario.primeiroNome + " " + dadosPaginaUsuario.ultimoNome;
-    
+
     $pEmail = document.createElement("p");
+    $divUsuario.appendChild($pEmail);
     $pEmail.innerText = "Email: " + dadosPaginaUsuario.email + "\n\n";
+
+    $divUsuario.appendChild(document.createElement("hr"));
+    
+    $viewer.appendChild(document.createElement("hr"));
     return $divUsuario;
 }
 
@@ -48,12 +51,12 @@ function listaCampanhasCriadas(dadosPaginaUsuario, $divUsuario) {
             $divListaCampanhas.appendChild($divCampanha);
             $divCampanha.classList.add("campanhaPerfil");
 
-            $linkCampanha = document.createElement("a");
+            $linkCampanha = document.createElement("div");
             $divCampanha.appendChild($linkCampanha);
 
-            $linkCampanha.id = "campanha" + dadosCampanha.url;
+            $linkCampanha.classList.add("linkCampanha");
 
-            $linkCampanha.innerText = dadosCampanha.nomeCurto + " " + dadosCampanha.status + " " + dadosCampanha.doacoes + "/" + dadosCampanha.meta;
+            $linkCampanha.innerText = dadosCampanha.nomeCurto + " - " + dadosCampanha.status + " - " + dadosCampanha.doacoes + "/" + dadosCampanha.meta;
             $linkCampanha.href = "#/" + dadosCampanha.url;
 
             $linkCampanha.addEventListener('click', () => getCampanha(dadosCampanha.url));
@@ -82,12 +85,12 @@ function listaDoacoesFeitas(dadosPaginaUsuario, $divUsuario) {
             $divListaDoacoesFeitas.appendChild($divCampanha);
             $divCampanha.classList.add("campanhaPerfil");
 
-            $linkCampanha = document.createElement("a");
+            $linkCampanha = document.createElement("div");
             $divCampanha.appendChild($linkCampanha);
 
-            $linkCampanha.id = "campanha" + campanhaComDoacao.url;
+            $linkCampanha.classList.add("linkCampanha");
 
-            $linkCampanha.innerText = campanhaComDoacao.nomeCurto + " " + campanhaComDoacao.status + " " +
+            $linkCampanha.innerText = campanhaComDoacao.nomeCurto + " - " + campanhaComDoacao.status + " - " +
             campanhaComDoacao.doacoes + "/" + campanhaComDoacao.meta;
             $linkCampanha.href = "#/" + campanhaComDoacao.url;
 

@@ -12,7 +12,10 @@ function home(boolean) {
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
 
-    $buttonHome.addEventListener('click', function () { home(true); });
+    $buttonHome.addEventListener('click', function () {
+        home(true);
+        exibeCampanhasTop5();
+    });
     $buttonSingUp.addEventListener('click', function () { cadastrarUsuario() });
     $buttonSingIn.addEventListener('click', function () { loginUsuario() });
 }
@@ -37,9 +40,11 @@ function loginUsuario() {
     $buttonLogin.addEventListener('click', login);
 }
 
-function hall() {
+function hall(boolean) {
 
-    location.hash = "";
+    if (boolean) {
+        location.hash = "/user";
+    }
 
     let $template = templateHall;
     $viewer.innerHTML = $template.innerHTML;
@@ -49,7 +54,7 @@ function hall() {
     let $buttonExibirCadastrarCampanha = document.querySelector("#exibirCadastraCampanha");
 
     $buttonHome.style.display = "inline";
-    $buttonHome.addEventListener('click', function () { hall() });
+    $buttonHome.addEventListener('click', function () { hall(true) });
     $buttonDesconectar.addEventListener('click', function () { desconectar() });
     $buttonExibirCadastrarCampanha.addEventListener('click', function () { exibeCadastraCampanha() });
 

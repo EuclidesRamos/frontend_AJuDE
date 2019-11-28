@@ -12,7 +12,7 @@ async function recuperaDados() {
         salvaUrl(dados);
     })
 
-    await fetch(URL + "/campanha/campanhasData", 
+    await fetch(URL + "/campanha/campanhasByData", 
     {
         'method':'GET',
         'headers':{'Content-Type':'application/json'}

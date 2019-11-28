@@ -70,7 +70,7 @@ h1 {
 }
 
 #viewer {
-    text-align: center;
+    text-align: center;   
 }
 
 input {
@@ -195,23 +195,19 @@ form {
 }
 
 #resultadoBuscaCampanha {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 15px;
-    color: #305561;
     text-align: center;
     top: 8px;
     position: relative;
 }
 
-#quadrado {
+.resultadoBusca {
     background-color: white;
-    text-align: center;
-    margin: 10px;
-    height: 35px;
     border-width: 1px;
     border-color: #305561;
     border-style: solid;
     border-radius: 10px;
+    margin: 10px;
+    align-items: center;
 }
 
 #footer {
@@ -228,13 +224,17 @@ form {
     margin: 10px;
 }
 
-#result {
-    width: 220px;
-    height: 35px;
+.paragrafoBusca {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #305561;
+    font-size: 15px;
     text-align: center;
+    height: 30px;
+    margin: 10px;
+    position: relative;
 }
 
-#divCampanha, #divUsuario {
+#divCampanha, #divUsuario, .campanhaTop5 {
     background-color: #6c9599;
     width: 1000px;
     color:white;
@@ -243,6 +243,11 @@ form {
     position: relative;
     border-radius: 10px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.campanhaTop5 {
+    width: 500px;
+    margin: 5px;
 }
 
 .comentario {
@@ -303,16 +308,55 @@ form {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-} 
+}
 
-.resposta {
+.containertop5 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.resposta, .campanhaPerfil {
     background-color: white;
     color: #305561;
     text-align: center;
     margin: 10px;
-    height: 50px;
     border-width: 1px;
     border-color: #305561;
     border-style: solid;
     border-radius: 10px;
+}
+
+.linkCampanha {
+    height: 30px;
+    text-align: center;
+    justify-items: center;
+}
+
+#usuarioNome {
+    color: #305561;
+}
+
+#enviarEstrategia {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+#estrategiaDeExibicao {
+    margin-top: 10px;
+    width: 80px;
+    height: 30px;
+    background-color: white;
+    border: 0;
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    outline: none;
+}
+
+.tituloRelevancia {
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-right: 10px;
 }

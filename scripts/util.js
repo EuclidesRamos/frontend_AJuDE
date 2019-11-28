@@ -21,6 +21,14 @@ async function tokenExpirado(response) {
 
 }
 
+function createURL(nomeCurto) {
+    let parsed = removeAcento(nomeCurto);
+    parsed = removeDuploEspaco(parsed);
+    parsed = trocaEspacoPorTraco(parsed);
+
+    return parsed;
+}
+
 function removeAcento(text) {       
     text = text.toLowerCase();                                                         
     text = text.replace(new RegExp('[ÁÀÂÃáàâã]','gi'), 'a');

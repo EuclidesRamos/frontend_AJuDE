@@ -25,17 +25,18 @@ function cadastro() {
         'headers':{'Content-Type':'application/json'}
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error("Cadastro não realizado. Certifique-se que colocou as informações corretamente e tente novamente."); 
-        } else {
+        if (response.ok) {
             return response.json();
+        } else if (false) {
+            throw new Error("Já existe um usuário com esse email associado. Por favor, tente com um email diferente.");
+        } else {
+            throw new Error("Cadastro não realizado. Certifique-se que colocou as informações corretamente e tente novamente."); 
         }
     })
     .then(dados => {
-        console.log(dados);
         roteamentoUser.push("#/" + dados.URLUser);
         alert("Cadastro realizado com sucesso!");
-        home();
+        loginUsuario();
     })
     .catch(error => {
         alert(error);
@@ -63,7 +64,7 @@ function login() {
         let token = dados.token;
         sessionStorage.setItem(idToken, token);
         sessionStorage.setItem("email", email);
-        hall();
+        hall(true);
     })
     .catch(error => {
         alert(error);
@@ -96,7 +97,7 @@ function cadastraCampanha() {
         .then(dados => {
             roteamentoCampanha.push("#/" + dados.url);
             alert("Campanha cadastrada com sucesso!");
-            hall();
+            getCampanha(dados.url);
         })
         .catch(error => {
             alert(error);
@@ -152,6 +153,7 @@ function getCampanha(urlCampanha) {
         });
     } else {
         alert("É necessário realizar login para continuar.");
+        loginUsuario();
     }
 }
 
@@ -218,8 +220,7 @@ function comentarioDelete(donoComentario, idComent) {
         if (donoComentario.email === sessionStorage.getItem("email")) {
             fetch(URL + "/campanha/" + urlCampanha + "/apagarComentario/"  + idComent,
         {
-            'method':'POST',
-            'body': {},
+            'method':'DELETE',
             'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
@@ -280,8 +281,7 @@ function respostaDelete(idComent, donoResposta, idResposta) {
         if (donoResposta.email === sessionStorage.getItem("email")) {
             fetch(URL + "/campanha/" + urlCampanha + "/comentario/"  + idComent + "/apagarResposta/" + idResposta,
         {
-            'method':'POST',
-            'body': {},
+            'method':'DELETE',
             'headers': {'Content-Type':'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem(idToken)}
         })
         .then(response => {
@@ -359,7 +359,6 @@ function getUsuario(urlUser) {
             }
         })
         .then(dadosUser => {
-            console.log(dadosUser);
             exibeUsuario(dadosUser);
         })
         .catch(error => {
@@ -368,8 +367,29 @@ function getUsuario(urlUser) {
 
 }
 
+function getCampanhas() {
+    let relevancia = document.querySelector("#estrategiaDeExibicao").value;
 
-function exibeResultadoBusca(dados, stringBusca) {
+    fetch(URL + "/campanha/campanhas" + relevancia,
+    {
+        'method':'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Não foi possível exibir Campanhas por essa relevância. Tente com uma diferente");
+        } else {
+            return response.json();
+        }
+    })
+    .then(dadosCampanhas => {
+        exibeCampanhasHome(dadosCampanhas);
+    })
+    .catch(error => {
+        alert(error);
+    })
+}
+
+function exibeResultadoBusca(dados, stringBusca, apenasAtivas) {
 
     location.hash = "/busca/" + stringBusca;
     $viewer.innerHTML = '';
@@ -378,20 +398,29 @@ function exibeResultadoBusca(dados, stringBusca) {
     $viewer.appendChild($h1);
     $h1.innerText = "Resultado da busca para - " + stringBusca + " -";
 
-
-    dados.forEach(element => {
-        let $div = document.createElement("div");
-        $div.id = "quadrado";
+    let $div = document.createElement("div");
+        $div.classList.add("container");
         $viewer.appendChild($div);
 
-        let $p = document.createElement("div");
-        $p.id = "resultadoBuscaCampanha";
-        $div.appendChild($p);
+    dados.forEach(element => {
+        let $divElement = document.createElement("div");
+        $divElement.classList.add("resultadoBusca");
+        if (apenasAtivas) {
+            if (element.status === "ativa") {
+                $div.appendChild($divElement);
+            }
+            
+        } else {
+            $div.appendChild($divElement);
+        }
 
+        let $p = document.createElement("p");
+        $p.classList.add("paragrafoBusca")
         $p.innerText = element.nomeCurto;
-        $p.href = element.url;
+        $divElement.appendChild($p);
+        $divElement.href = element.url;
         
-        $p.addEventListener('click', function () { getCampanha(element.url); });
+        $divElement.addEventListener('click', function () { getCampanha(element.url); });
     });
 }
 
@@ -407,21 +436,13 @@ function buscarCampanha() {
     }, 500);
 }
 
-function createURL(nomeCurto) {
-    let parsed = removeAcento(nomeCurto);
-    parsed = removeDuploEspaco(parsed);
-    parsed = trocaEspacoPorTraco(parsed);
-
-    return parsed;
-}
-
 function desconectar() {
     if (!!sessionStorage.getItem(idToken) && !!sessionStorage.getItem("email")) {
         sessionStorage.removeItem(idToken);
         sessionStorage.removeItem("email");
     }
     ajustaBotoesHeader('none', 'inline');
-    home();
+    home(true);
 }
 
 
@@ -431,8 +452,13 @@ function desconectar() {
     await recuperaDados(); // Recupera todas as urls de todas as campanhas e usuários já cadastrados
 
     let $campoBusca = document.querySelector("#search");
-    $campoBusca.addEventListener('keyup', function () { buscarCampanha(); })
+    $campoBusca.addEventListener('keyup', function () { buscarCampanha(); });
 
+    if (!!sessionStorage.getItem(idToken)) {
+        ajustaBotoesHeader('inline', 'none');
+        hall(false);
+    }
+    
     await roteamento();    
 }());
 
@@ -442,6 +468,7 @@ function roteamento() {
     home(false);
     if (["", "#"].includes(hash)) {
         home(true);
+        exibeCampanhasTop5();
     } else if (["#/login"].includes(hash)) {
         loginUsuario();
     } else if (["#/cadastro"].includes(hash)) {
