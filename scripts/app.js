@@ -389,15 +389,13 @@ function getCampanhas() {
     })
 }
 
-function exibeResultadoBusca(dados, stringBusca, apenasAtivas) {
-
+function exibeResultadoBusca(dados, stringBusca) {
     location.hash = "/busca/" + stringBusca;
     $viewer.innerHTML = '';
-    
+    adicionaDivFiltro(dados, stringBusca);
     let $h1 = document.createElement("h1");
     $viewer.appendChild($h1);
     $h1.innerText = "Resultado da busca para - " + stringBusca + " -";
-
     let $div = document.createElement("div");
         $div.classList.add("container");
         $viewer.appendChild($div);
@@ -405,8 +403,8 @@ function exibeResultadoBusca(dados, stringBusca, apenasAtivas) {
     dados.forEach(element => {
         let $divElement = document.createElement("div");
         $divElement.classList.add("resultadoBusca");
-        if (apenasAtivas) {
-            if (element.status === "ativa") {
+        if (document.querySelector("#checkbox").checked) {
+            if (element.status === "Ativa") {
                 $div.appendChild($divElement);
             }
             
@@ -422,6 +420,13 @@ function exibeResultadoBusca(dados, stringBusca, apenasAtivas) {
         
         $divElement.addEventListener('click', function () { getCampanha(element.url); });
     });
+}
+
+function adicionaDivFiltro(dados, stringBusca) {
+    $divCheckbox = document.querySelector("#divCheckbox").style.display = "flex";
+    $input = document.querySelector("#checkbox");
+    $input.addEventListener('change', function() {exibeResultadoBusca(dados, stringBusca)});
+
 }
 
 function buscarCampanha() {

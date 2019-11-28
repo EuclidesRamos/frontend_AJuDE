@@ -19,7 +19,7 @@ header {
     background-color: white;
     border: none;
     top: 40px;
-    right: 278px;
+    right: 200px;
     position: absolute;
 }
 
@@ -44,13 +44,13 @@ header {
     border: none;
     outline: none;
     top: 40px;
-    right: 230px;
+    right: 150px;
     position: absolute;
 }
 
 #singUp, #desconectar {
     top: 40px;
-    right: 300px;
+    right: 225px;
     position: absolute;
 }
 
@@ -85,6 +85,10 @@ input {
     border-style: solid;
     outline: none;
     margin: 5px;
+}
+
+input[type=checkbox] {
+    width: 30px;
 }
 
 input[type=search] {
@@ -298,7 +302,7 @@ form {
     border-width: 1px;
     outline: none;
     margin: 5px;
-    bottom: 35px;
+    bottom: 20px;
     display: flex;
     position: relative;
 }
@@ -359,4 +363,11 @@ form {
     color: #305561;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin-right: 10px;
+}
+
+label {
+    color: #305561;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-right: 10px;
+    font-size: 20px;
 }
