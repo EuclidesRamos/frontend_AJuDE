@@ -1,5 +1,5 @@
-// const URL = "https://ajudeproject.herokuapp.com/api/v1";
-const URL = "http://localhost:8080/api/v1";
+const URL = "https://ajudeproject.herokuapp.com/api/v1";
+// const URL = "http://localhost:8080/api/v1";
 let bufferTime = null;
 
 function cadastro() {
@@ -454,7 +454,8 @@ function desconectar() {
 (async function init() {
     await Promise.all([fetchTemplates()]);
     
-    await recuperaDados(); // Recupera todas as urls de todas as campanhas e usuários já cadastrados
+    await recuperaDadosCampanha(); // Recupera todas as urls de todas as campanhas já cadastradss
+    await recuperaDadosUsers(); // Recupera todas as urls de todos os usuários já cadastrados
 
     let $campoBusca = document.querySelector("#search");
     $campoBusca.addEventListener('keyup', function () { buscarCampanha(); });

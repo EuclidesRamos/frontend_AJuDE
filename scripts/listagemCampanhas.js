@@ -34,7 +34,6 @@ function exibeCampanhasTop5() {
     $viewer.appendChild($divTop5);
     $divTop5.classList.add("containertop5");
     getCampanhas();
-    console.log("ai1");
     $imgSend.addEventListener('click', function () {
         $divTop5.innerHTML = '';
         getCampanhas();
@@ -42,32 +41,33 @@ function exibeCampanhasTop5() {
 }
 
 function exibeCampanhasHome(dadosCampanhas) {
-    console.log("ai2");
+
+    contCampanhasList = 0;
     if (dadosCampanhas.length !== 0) {
         dadosCampanhas.forEach((campanha, index) => {
-            if (index < 5) {
+            if (contCampanhasList < 5) {
                 console.log(campanha);
                 if (campanha.status === "Ativa") {
                     let $p = document.createElement("div");
                     $p.id = "campanha" + campanha.id;
                     $p.classList.add("campanhaTop5");
                     $divTop5.appendChild($p);
-                    console.log("ai2");
             
                     if ((campanha.meta - campanha.doacoes) > 0) {
                         $p.innerText = campanha.nomeCurto + "\n" + 
-                        "Falta " + (campanha.meta - campanha.doacoes) + " para atingir a meta" + "\n" + 
+                        "Falta R$" + (campanha.meta - campanha.doacoes) + " para atingir a meta." + "\n" + 
                         "DeadLine: " + campanha.deadLine + "\n" +
                         "Likes: " + campanha.numeroDeLikes;
                     } else {
                         $p.innerText = campanha.nomeCurto + "\n" + 
-                        "Meta de " + campanha.meta + " já atingida\n" + 
+                        "Meta de R$" + campanha.meta + " já atingida.\n" + 
                         "DeadLine: " + campanha.deadLine + "\n" +
                         "Likes: " + campanha.numeroDeLikes;
                     }
                     $p.href = campanha.url;
                     
                     $p.addEventListener('click', function () { getCampanha(campanha.url); });
+                    contCampanhasList += 1;
                 }
             }
         });
