@@ -1,19 +1,20 @@
 const $divTop5 = document.createElement("div");
+$divTop5.id = "divTop5";
 
 function exibeCampanhasTop5() {
     $porLike = document.createElement("option");
     $porQuantia = document.createElement("option");
     $porCronologia = document.createElement("option");
-
+    
     $a = document.createElement("a");
     $viewer.appendChild($a);
     $a.innerText = "Campanhas mais relevantes por";
     $a.classList.add("tituloRelevancia");
-
+    
     $select = document.createElement("select");
     $select.id = "estrategiaDeExibicao";
     $viewer.appendChild($select);
-
+    
     $imgSend = document.createElement("img");
     $imgSend.src = "/icons/eye.png";
     $imgSend.id = "enviarEstrategia";
@@ -22,6 +23,10 @@ function exibeCampanhasTop5() {
     $select.appendChild($porLike);
     $select.appendChild($porQuantia);
     $select.appendChild($porCronologia);
+    
+    $viewer.appendChild($divTop5);
+    $divTop5.classList.add("containertop5");
+    document.querySelector("#divTop5").innerHTML = '';
 
     $porLike.innerText = "Like";
     $porQuantia.innerText = "Quantia";
@@ -31,12 +36,11 @@ function exibeCampanhasTop5() {
     $porQuantia.value = "ByQuantia";
     $porCronologia.value = "ByData";
 
-    $viewer.appendChild($divTop5);
-    $divTop5.classList.add("containertop5");
+    $divTop5.innerHTML = '';
     getCampanhas();
     $imgSend.addEventListener('click', function () {
         $divTop5.innerHTML = '';
-        getCampanhas();
+        getCampanhas();;
     })
 }
 

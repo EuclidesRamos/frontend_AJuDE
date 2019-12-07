@@ -12,8 +12,8 @@ function home(boolean) {
     let $buttonSingUp = document.querySelector("#singUp");
     let $buttonSingIn = document.querySelector("#singIn");
 
-    $buttonHome.addEventListener('click', function () {
-        home(true);
+    $buttonHome.addEventListener('click', async function () {
+        await home(true);
         exibeCampanhasTop5();
     });
     $buttonSingUp.addEventListener('click', function () { cadastrarUsuario() });
