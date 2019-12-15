@@ -29,13 +29,13 @@ function criaDivCampanha(dadosCampanha) {
     $divCampanha.id = "divCampanha";
     
     $divCampanha.innerText = "Campanha: " + dadosCampanha.nomeCurto + "\n\n" +
-    "Descrição: " + dadosCampanha.descricao + "\n\n" +
-    "Status: " + dadosCampanha.status + "\n" +
-    "DeadLine: " + dadosCampanha.deadLine + "\n" +
-    "Meta: " + dadosCampanha.meta + "\n" +
-    "Total de Doações: " + dadosCampanha.doacoes + "\n\n" +
-    "Autor: " + dadosCampanha.infoDono.primeiroNome + " " + dadosCampanha.infoDono.ultimoNome + "\n" +
-    "Likes: " + dadosCampanha.numeroDeLikes + "\n";
+    "Descrição:  " + dadosCampanha.descricao + "\n\n" +
+    "Status:  " + dadosCampanha.status + "\n" +
+    "DeadLine:  " + dadosCampanha.deadLine + "\n" +
+    "Meta:  R$" + dadosCampanha.meta + "\n" +
+    "Total de Doações:  R$" + dadosCampanha.doacoes + "\n\n" +
+    "Autor:  " + dadosCampanha.infoDono.primeiroNome + " " + dadosCampanha.infoDono.ultimoNome + "\n" +
+    "Likes:  " + dadosCampanha.numeroDeLikes + "\n";
     return $divCampanha;
 }
 

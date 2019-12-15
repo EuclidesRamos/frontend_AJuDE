@@ -1,17 +1,6 @@
 let roteamentoCampanha = [];
-let roteamentoUser = [];
 
-async function recuperaDados() {
-    await fetch(URL + "/usuarios/list",
-    {
-        'method':'GET',
-        'headers':{'Content-Type':'application/json'}
-    })
-    .then(response => response.json())
-    .then(dados => {
-        salvaUrl(dados);
-    })
-
+async function recuperaDadosCampanha() {
     await fetch(URL + "/campanha/campanhasByData", 
     {
         'method':'GET',
@@ -21,12 +10,6 @@ async function recuperaDados() {
     .then(dados => {
         salvaUrlCampanha(dados);
     })
-}
-
-function salvaUrl(dados) {
-    dados.forEach(element => {
-        roteamentoUser.push("#/" + element.urlUser);
-    });
 }
 
 function salvaUrlCampanha(dados) {
