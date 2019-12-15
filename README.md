@@ -18,8 +18,7 @@ O AJuDE é uma plataforma para financiamento coletivo onde as causas mais popula
 
 ## Estrutura
 
-  * **/icons:** Diretório que armazena os ícones utlizados no projeto; <br>
-  * **index.html** - Arquivo contendo a página do projeto (Foi utilizado a arquitetura sigle page e multi viewes);
+  * **/icons:** Diretório que armazena os ícones utlizados no projeto;
   * **/scripts** - Diretório contendo todos os arquivos referentes aos scripts do projeto;
       * **/scripts/app.js** - Aquivo principal, contendo todos os métodos de fecth do sistema, além de funções auxiliares de visualização de dados. Também contém a função init (a função que se auto invoca);
       * **/scripts/campanha.js** - Arquivo contento todas as informações de exibição de campanha, com comentários likes e respostas a comentários;
@@ -27,10 +26,12 @@ O AJuDE é uma plataforma para financiamento coletivo onde as causas mais popula
       * **/scripts/listagemCampanhas.js** - Arquivo contendo as funções de listagem da página inicial do sistema (Top 5, de acordo com o tipo de relevância);
       * **/scripts/paginaUsuario.js** - Arquivo responsável por organizar os dados do perfil de usuário e exibi-los;
       * **/scripts/util.js** - Arquivo contendo funções úteis no projeto. Como, por exxemplo, verificação e validação de email e senha, verificação de token exiprado, criação de URL;
-      * **/scripts/viewes.js** - Arquivo armazenando as funções de redirecionamento, organizando quais informações serão exibidas na página inicial;
+      * **/scripts/viewes.js** - Arquivo armazenando as funções de redirecionamento, organizando quais informações serão exibidas na página inicial.
   * **/style** - Diretório contendo o arquivo css, responsável pela estilização da página;
       * **/style/estilo.css** - Arquivo contendo todas as proporções, cores e animações de todos os elementos do app.
-  * **index.php** - Arquivo necessário para deploy do front-end no heroku.
+  * **index.html** - Arquivo contendo a página do projeto (Foi utilizado a arquitetura sigle page e multi viewes);
+  * **index.php** - Arquivo necessário para deploy do front-end no heroku;
+  * **templates.html** - Arquivo contendo todas as telas prontas da aplicação;
   * **README.md** - Este aquivo que vos exibe.
 
 
